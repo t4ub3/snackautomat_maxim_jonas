@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:path/path.dart';
 import 'package:snackautomat/models/snack.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 class DatabaseService {
   static Database? _db;
@@ -21,7 +22,7 @@ class DatabaseService {
     final db = await openDatabase(
       dbPath,
       onCreate: (db, version) {
-        db.execute(_onCreateSql);
+        db.execute(_createSnackTable);
       },
     );
     return database;
@@ -29,22 +30,23 @@ class DatabaseService {
 
   void addSnack(Snack snack) async {
     final db = await database;
+    final blob = base64Encode(await snack.image.readAsBytes());
     await db.insert(
       "snacks",
       {
         "name": snack.name,
         "price": snack.price,
-        "filepath": snack.image.path,
+        "fileAsBase64": blob,
       },
     );
   }
 }
 
-String _onCreateSql = '''
+String _createSnackTable = '''
 CREATE TABLE snacks (
 id INTEGER PRIMARY KEY,
 name TEXT NOT NULL,
 price REAL NOT NULL,
-filepath TEXT,
+fileAsBase64 STRING NOT NULL,
 )
 ''';
