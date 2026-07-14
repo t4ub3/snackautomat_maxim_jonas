@@ -21,6 +21,7 @@ class DatabaseService {
 
     final db = await openDatabase(
       dbPath,
+      version: 1,
       onCreate: (db, version) {
         db.execute(_createSnackTable);
       },
@@ -28,9 +29,11 @@ class DatabaseService {
     return database;
   }
 
-  void addSnack(Snack snack) async {
+  Future<void> addSnack(Snack snack) async {
     final db = await database;
-    final blob = base64Encode(await snack.image.readAsBytes());
+    final blob = snack.image != null
+        ? base64Encode(await snack.image!.readAsBytes())
+        : "";
     await db.insert(
       "snacks",
       {
@@ -39,6 +42,12 @@ class DatabaseService {
         "fileAsBase64": blob,
       },
     );
+  }
+
+  Future<List<Snack>?> getAll() async {
+    final db = await database;
+    final data = await db.query("snacks");
+    print(data);
   }
 }
 

@@ -7,8 +7,9 @@ part 'snack.freezed.dart';
 @freezed
 abstract class Snack with _$Snack {
   const factory Snack({
+    int? id,
     required String name,
     required double price,
-    required File image,
+    File? image,
   }) = _Snack;
 }
