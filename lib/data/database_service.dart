@@ -59,3 +59,13 @@ price REAL NOT NULL,
 fileAsBase64 STRING NOT NULL,
 )
 ''';
+
+String _createShelfTable = '''
+CREATE TABLE shelf (
+id INTEGER PRIMARY KEY,
+snackId INTEGER NOT NULL,
+number INTEGER NOT NULL,
+maxCapacity INTEGER NOT NULL,
+currentFill INTEGER DEFAULT 0,
+)
+''';
