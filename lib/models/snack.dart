@@ -10,6 +10,6 @@ abstract class Snack with _$Snack {
     int? id,
     required String name,
     required double price,
-    File? image,
+    required File image,
   }) = _Snack;
 }

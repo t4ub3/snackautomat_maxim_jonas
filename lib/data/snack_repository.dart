@@ -6,7 +6,7 @@ part "snack_repository.g.dart";
 
 @riverpod
 SnackRepository snackRepository(Ref ref) {
-  return snackRepository(ref);
+  return SnackRepository(DatabaseService.db);
 }
 
 class SnackRepository {

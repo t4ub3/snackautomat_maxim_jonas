@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Snack implements DiagnosticableTreeMixin {
 
- int? get id; String get name; double get price; File? get image;
+ int? get id; String get name; double get price; File get image;
 /// Create a copy of Snack
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -51,7 +51,7 @@ abstract mixin class $SnackCopyWith<$Res>  {
   factory $SnackCopyWith(Snack value, $Res Function(Snack) _then) = _$SnackCopyWithImpl;
 @useResult
 $Res call({
- int? id, String name, double price, File? image
+ int? id, String name, double price, File image
 });
 
 
@@ -68,13 +68,13 @@ class _$SnackCopyWithImpl<$Res>
 
 /// Create a copy of Snack
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? price = null,Object? image = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? price = null,Object? image = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as double,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
-as File?,
+as double,image: null == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
+as File,
   ));
 }
 
@@ -159,7 +159,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  double price,  File? image)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  double price,  File image)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Snack() when $default != null:
 return $default(_that.id,_that.name,_that.price,_that.image);case _:
@@ -180,7 +180,7 @@ return $default(_that.id,_that.name,_that.price,_that.image);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  double price,  File? image)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  double price,  File image)  $default,) {final _that = this;
 switch (_that) {
 case _Snack():
 return $default(_that.id,_that.name,_that.price,_that.image);case _:
@@ -200,7 +200,7 @@ return $default(_that.id,_that.name,_that.price,_that.image);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  double price,  File? image)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  double price,  File image)?  $default,) {final _that = this;
 switch (_that) {
 case _Snack() when $default != null:
 return $default(_that.id,_that.name,_that.price,_that.image);case _:
@@ -215,13 +215,13 @@ return $default(_that.id,_that.name,_that.price,_that.image);case _:
 
 
 class _Snack with DiagnosticableTreeMixin implements Snack {
-  const _Snack({this.id, required this.name, required this.price, this.image});
+  const _Snack({this.id, required this.name, required this.price, required this.image});
   
 
 @override final  int? id;
 @override final  String name;
 @override final  double price;
-@override final  File? image;
+@override final  File image;
 
 /// Create a copy of Snack
 /// with the given fields replaced by the non-null parameter values.
@@ -259,7 +259,7 @@ abstract mixin class _$SnackCopyWith<$Res> implements $SnackCopyWith<$Res> {
   factory _$SnackCopyWith(_Snack value, $Res Function(_Snack) _then) = __$SnackCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String name, double price, File? image
+ int? id, String name, double price, File image
 });
 
 
@@ -276,13 +276,13 @@ class __$SnackCopyWithImpl<$Res>
 
 /// Create a copy of Snack
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? price = null,Object? image = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? price = null,Object? image = null,}) {
   return _then(_Snack(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as double,image: freezed == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
-as File?,
+as double,image: null == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
+as File,
   ));
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snackautomat/models/snack.dart';
 
 class Button extends StatelessWidget {
   final String text;
@@ -30,12 +31,12 @@ class Button extends StatelessWidget {
   }
 }
 
-class Snack {
-  final IconData icon;
-  final String price;
+// class Snack {
+//   final IconData icon;
+//   final String price;
 
-  const Snack({required this.icon, required this.price});
-}
+//   const Snack({required this.icon, required this.price});
+// }
 
 class ProduktFach extends StatelessWidget {
   final Snack snack;
@@ -52,7 +53,7 @@ class ProduktFach extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: Icon(snack.icon, size: 40, color: Colors.purple),
+            child: Image.file(snack.image),
           ),
           Row(
             children: [
@@ -73,8 +74,11 @@ class ProduktFach extends StatelessWidget {
                   decoration: const BoxDecoration(
                     border: Border(top: BorderSide()),
                   ),
-                  child: const Center(
-                    child: Text('1,50€', style: TextStyle(fontSize: 10)),
+                  child: Center(
+                    child: Text(
+                      '${snack.price}€',
+                      style: const TextStyle(fontSize: 10),
+                    ),
                   ),
                 ),
               ),

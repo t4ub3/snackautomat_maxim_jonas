@@ -4,21 +4,46 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:snackautomat/data/database_service.dart';
 import 'package:snackautomat/models/snack.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:path/path.dart' as p;
 
 void main() {
-  Snack snack = Snack(name: "Pringles", price: 1.5, image: null);
-  if (Platform.isWindows || Platform.isLinux) {
-    // Initialize FFI
-    sqfliteFfiInit();
-  }
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
 
-  databaseFactory = databaseFactoryFfi;
-  final DatabaseService dbService = DatabaseService.db;
+    if (Platform.isWindows || Platform.isLinux) {
+      sqfliteFfiInit();
+    }
+    databaseFactory = databaseFactoryFfi;
+  });
 
-  test('add and read data from db', () {
-    dbService.addSnack(snack);
-    final data = dbService.getAll();
-    print(data);
+  test('add and read data from db', () async {
+    File pringlesImg = File(
+      p.normalize(p.absolute(p.join("test", "test_assets", "pringles.png"))),
+    );
+    File hariboImg = File(
+      p.normalize(p.absolute(p.join("test", "test_assets", "haribo.png"))),
+    );
+    File ritterSportImg = File(
+      p.normalize(
+        p.absolute(p.join("test", "test_assets", "ritter-sport.png")),
+      ),
+    );
+    Snack pringles = Snack(name: "pringles", price: 1.5, image: pringlesImg);
+    Snack haribo = Snack(name: "haribo", price: 1.5, image: hariboImg);
+    Snack ritterSport = Snack(
+      name: "ritterSport",
+      price: 1.5,
+      image: ritterSportImg,
+    );
+
+    final DatabaseService dbService = DatabaseService.db;
+
+    await dbService.addSnack(pringles);
+    await dbService.addSnack(haribo);
+    await dbService.addSnack(ritterSport);
+
+    final data = await dbService.getAll();
+    print(data![0]);
     expect(data, isNotNull);
   });
 }

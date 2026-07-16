@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:snackautomat/models/snack.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DatabaseService {
   static Database? _db;
@@ -22,11 +24,11 @@ class DatabaseService {
     final db = await openDatabase(
       dbPath,
       version: 1,
-      onCreate: (db, version) {
-        db.execute(_createSnackTable);
+      onCreate: (db, version) async {
+        await db.execute(_createSnackTable);
       },
     );
-    return database;
+    return db;
   }
 
   Future<void> addSnack(Snack snack) async {
@@ -47,7 +49,24 @@ class DatabaseService {
   Future<List<Snack>?> getAll() async {
     final db = await database;
     final data = await db.query("snacks");
-    print(data);
+    return Future.wait(
+      data.map((row) async {
+        final base64Str = row["fileAsBase64"] as String;
+
+        File image;
+        final bytes = base64Decode(base64Str);
+        final dir = await Directory.systemTemp.createTemp('snack_test');
+        image = File(join(dir.path, "${row["name"]}.png"));
+        await image.writeAsBytes(bytes);
+
+        return Snack(
+          id: row["id"] as int,
+          name: row["name"] as String,
+          price: row["price"] as double,
+          image: image,
+        );
+      }).toList(),
+    );
   }
 }
 
@@ -56,8 +75,8 @@ CREATE TABLE snacks (
 id INTEGER PRIMARY KEY,
 name TEXT NOT NULL,
 price REAL NOT NULL,
-fileAsBase64 STRING NOT NULL,
-)
+fileAsBase64 TEXT NOT NULL
+);
 ''';
 
 String _createShelfTable = '''
@@ -66,6 +85,6 @@ id INTEGER PRIMARY KEY,
 snackId INTEGER NOT NULL,
 number INTEGER NOT NULL,
 maxCapacity INTEGER NOT NULL,
-currentFill INTEGER DEFAULT 0,
-)
+currentFill INTEGER DEFAULT 0
+);
 ''';
