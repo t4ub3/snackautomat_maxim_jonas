@@ -33,9 +33,7 @@ class DatabaseService {
 
   Future<void> addSnack(Snack snack) async {
     final db = await database;
-    final blob = snack.image != null
-        ? base64Encode(await snack.image!.readAsBytes())
-        : "";
+    final blob = base64Encode(await snack.image.readAsBytes());
     await db.insert(
       "snacks",
       {
