@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:snackautomat/application/snack_provider.dart';
 import 'package:snackautomat/data/database_service.dart';
 import 'package:snackautomat/models/snack.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -17,6 +19,8 @@ void main() {
   });
 
   test('add and read data from db', () async {
+    final container = ProviderContainer.test();
+
     File pringlesImg = File(
       p.normalize(p.absolute(p.join("test", "test_assets", "pringles.png"))),
     );
@@ -28,6 +32,7 @@ void main() {
         p.absolute(p.join("test", "test_assets", "ritter-sport.png")),
       ),
     );
+
     Snack pringles = Snack(name: "pringles", price: 1.5, image: pringlesImg);
     Snack haribo = Snack(name: "haribo", price: 1.5, image: hariboImg);
     Snack ritterSport = Snack(
@@ -36,14 +41,15 @@ void main() {
       image: ritterSportImg,
     );
 
-    final DatabaseService dbService = DatabaseService.db;
+    // final DatabaseService dbService = DatabaseService.db;
 
-    await dbService.addSnack(pringles);
-    await dbService.addSnack(haribo);
-    await dbService.addSnack(ritterSport);
+    // await dbService.addSnack(pringles);
+    // await dbService.addSnack(haribo);
+    // await dbService.addSnack(ritterSport);
 
-    final data = await dbService.getAll();
-    print(data![0]);
+    // final data = await dbService.getAll();
+    final data = container.read(snackListProvider);
+    print(data);
     expect(data, isNotNull);
   });
 }
