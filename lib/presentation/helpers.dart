@@ -40,7 +40,10 @@ class Snack {
 class ProduktFach extends StatelessWidget {
   final Snack snack;
 
-  const ProduktFach({super.key, required this.snack});
+  const ProduktFach({
+    super.key,
+    required this.snack,
+  });
 
   @override
   Widget build(BuildContext context) {
