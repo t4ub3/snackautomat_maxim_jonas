@@ -11,51 +11,15 @@ class AdminPage extends StatelessWidget {
   ];
 
   final List<Snacks> snacks = [
-    Snacks(
-      name: 'Nüsse',
-      price: '2.50 €',
-      stock: 10,
-    ),
-    Snacks(
-      name: 'Haribo',
-      price: '3.50 €',
-      stock: 2,
-    ),
-    Snacks(
-      name: 'Schokolade',
-      price: '2.00 €',
-      stock: 4,
-    ),
-    Snacks(
-      name: 'Cookie',
-      price: '1.50 €',
-      stock: 6,
-    ),
-    Snacks(
-      name: 'Cake',
-      price: '1.50 €',
-      stock: 2,
-    ),
-    Snacks(
-      name: 'Ice Cream',
-      price: '1.70 €',
-      stock: 5,
-    ),
-    Snacks(
-      name: 'Drink',
-      price: '1.80 €',
-      stock: 7,
-    ),
-    Snacks(
-      name: 'Egg',
-      price: '0.50 €',
-      stock: 5,
-    ),
-    Snacks(
-      name: 'Kaugummi',
-      price: '0.80 €',
-      stock: 6,
-    ),
+    Snacks(name: 'Nüsse', price: '2.50 €', stock: 10),
+    Snacks(name: 'Haribo', price: '3.50 €', stock: 2),
+    Snacks(name: 'Schokolade', price: '2.00 €', stock: 4),
+    Snacks(name: 'Cookie', price: '1.50 €', stock: 6),
+    Snacks(name: 'Cake', price: '1.50 €', stock: 2),
+    Snacks(name: 'Ice Cream', price: '1.70 €', stock: 5),
+    Snacks(name: 'Drink', price: '1.80 €', stock: 7),
+    Snacks(name: 'Egg', price: '0.50 €', stock: 5),
+    Snacks(name: 'Kaugummi', price: '0.80 €', stock: 6),
   ];
 
   AdminPage({super.key});
@@ -68,12 +32,12 @@ class AdminPage extends StatelessWidget {
         title: const Text('Admin'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(40),
         child: Row(
           children: [
             // Linke Seite
             Expanded(
-              flex: 3,
+              flex: 4,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -190,6 +154,27 @@ class AdminPage extends StatelessWidget {
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+
+                  Align(
+                    alignment: Alignment.bottomRight,
+
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                      ),
+                      child: const Text(
+                        'Nachfüllen',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -198,7 +183,7 @@ class AdminPage extends StatelessWidget {
 
             // Rechte Seite
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
