@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:path/path.dart';
+import 'package:snackautomat/data/snack_db_model.dart';
 import 'package:snackautomat/models/snack.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
+
+part "database_strings.dart";
 
 class DatabaseService {
   static Database? _db;
@@ -13,13 +13,13 @@ class DatabaseService {
   DatabaseService._constructor();
 
   Future<Database> get database async {
-    _db ??= await getDatabase();
+    _db ??= await _getDatabase();
     return _db!;
   }
 
-  Future<Database> getDatabase() async {
+  Future<Database> _getDatabase() async {
     final dbDirPath = await getDatabasesPath();
-    final dbPath = join(dbDirPath, "snackautomat_db.db");
+    final dbPath = join(dbDirPath, "$_dbName.db");
 
     final db = await openDatabase(
       dbPath,
@@ -31,58 +31,30 @@ class DatabaseService {
     return db;
   }
 
-  Future<void> addSnack(Snack snack) async {
+  Future<void> addSnack(SnackDbModel snack) async {
     final db = await database;
-    final blob = base64Encode(await snack.image.readAsBytes());
     await db.insert(
-      "snacks",
+      _snackTableName,
       {
-        "name": snack.name,
-        "price": snack.price,
-        "fileAsBase64": blob,
+        _nameColumnName: snack.name,
+        _priceColumnName: snack.price,
+        _fileAsBase64ColumnName: snack.imageAsBase64,
       },
     );
   }
 
-  Future<List<Snack>?> getAll() async {
+  Future<List<SnackDbModel>?> getAll() async {
     final db = await database;
-    final data = await db.query("snacks");
+    final data = await db.query(_snackTableName);
     return Future.wait(
       data.map((row) async {
-        final base64Str = row["fileAsBase64"] as String;
-
-        File image;
-        final bytes = base64Decode(base64Str);
-        final dir = await Directory.systemTemp.createTemp('snack_test');
-        image = File(join(dir.path, "${row["name"]}.png"));
-        await image.writeAsBytes(bytes);
-
-        return Snack(
-          id: row["id"] as int,
-          name: row["name"] as String,
-          price: row["price"] as double,
-          image: image,
+        return SnackDbModel(
+          row[_idColumnName] as int,
+          row[_nameColumnName] as String,
+          row[_priceColumnName] as double,
+          row[_fileAsBase64ColumnName] as String,
         );
       }).toList(),
     );
   }
 }
-
-String _createSnackTable = '''
-CREATE TABLE snacks (
-id INTEGER PRIMARY KEY,
-name TEXT NOT NULL,
-price REAL NOT NULL,
-fileAsBase64 TEXT NOT NULL
-);
-''';
-
-String _createShelfTable = '''
-CREATE TABLE shelf (
-id INTEGER PRIMARY KEY,
-snackId INTEGER NOT NULL,
-number INTEGER NOT NULL,
-maxCapacity INTEGER NOT NULL,
-currentFill INTEGER DEFAULT 0
-);
-''';

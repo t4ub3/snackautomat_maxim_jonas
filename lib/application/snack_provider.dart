@@ -7,7 +7,7 @@ part "snack_provider.g.dart";
 @riverpod
 class SnackList extends _$SnackList {
   @override
-  Future<List<Snack>?> build() {
+  Future<List<Snack>> build() {
     return ref.watch(snackRepositoryProvider).fetchSnacks();
   }
 
