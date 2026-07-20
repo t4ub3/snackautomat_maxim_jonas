@@ -34,6 +34,7 @@ class Snack {
   final IconData icon;
   final String price;
 
+
   const Snack({required this.icon, required this.price});
 }
 
@@ -87,4 +88,16 @@ class ProduktFach extends StatelessWidget {
       ),
     );
   }
+}
+
+class Coin {
+  final String name;
+  final int stock;
+  final int added;
+
+  Coin({
+    required this.name,
+    required this.stock,
+    this.added = 0,
+  });
 }
