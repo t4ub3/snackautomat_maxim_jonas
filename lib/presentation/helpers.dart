@@ -34,13 +34,17 @@ class Snack {
   final IconData icon;
   final String price;
 
+
   const Snack({required this.icon, required this.price});
 }
 
 class ProduktFach extends StatelessWidget {
   final Snack snack;
 
-  const ProduktFach({super.key, required this.snack});
+  const ProduktFach({
+    super.key,
+    required this.snack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -84,4 +88,16 @@ class ProduktFach extends StatelessWidget {
       ),
     );
   }
+}
+
+class Coin {
+  final String name;
+  final int stock;
+  final int added;
+
+  Coin({
+    required this.name,
+    required this.stock,
+    this.added = 0,
+  });
 }
