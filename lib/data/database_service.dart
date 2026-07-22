@@ -26,6 +26,9 @@ class DatabaseService {
       version: 1,
       onCreate: (db, version) async {
         await db.execute(_createSnackTable);
+        await db.execute(_createShelfTable);
+        await db.execute(_createTransactionTable);
+        await db.execute(_createMoneyStockTable);
       },
     );
     return db;
