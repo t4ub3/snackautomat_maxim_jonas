@@ -41,7 +41,10 @@ class Button extends StatelessWidget {
 class ProduktFach extends StatelessWidget {
   final Snack snack;
 
-  const ProduktFach({super.key, required this.snack});
+  const ProduktFach({
+    super.key,
+    required this.snack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -88,4 +91,16 @@ class ProduktFach extends StatelessWidget {
       ),
     );
   }
+}
+
+class Coin {
+  final String name;
+  final int stock;
+  final int added;
+
+  Coin({
+    required this.name,
+    required this.stock,
+    this.added = 0,
+  });
 }

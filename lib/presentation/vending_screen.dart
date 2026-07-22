@@ -101,7 +101,25 @@ class Snackautomat extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
               child: Column(
                 children: [
-                  // 1. Display
+                  // Admin
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AdminPage(),
+                          ),
+                        );
+                      },
+                      child: Text('Admin'),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // Display
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
@@ -123,7 +141,7 @@ class Snackautomat extends ConsumerWidget {
 
                   const SizedBox(height: 30),
 
-                  // 2. Ziffernblock
+                  // Ziffernblock
                   SizedBox(
                     width: 180,
                     child: Column(
@@ -145,7 +163,7 @@ class Snackautomat extends ConsumerWidget {
 
                   const SizedBox(height: 40),
 
-                  // 3. Münzeingabe
+                  // Münzeingabe
                   Padding(
                     padding: const EdgeInsets.only(left: 20),
                     child: Row(
@@ -187,7 +205,7 @@ class Snackautomat extends ConsumerWidget {
                   ),
 
                   const Spacer(),
-                  // 4. Wechselgeld
+                  // Wechselgeld
                   Column(
                     children: [
                       const Text(
