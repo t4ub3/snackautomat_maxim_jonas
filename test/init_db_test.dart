@@ -23,7 +23,7 @@ void main() {
     final container = ProviderContainer.test();
 
     // keeps the provider mounted for the duration of the test
-    container.listen(snackListProvider, (_, __) {}, fireImmediately: true);
+    container.listen(snackListProvider, (_, _) {}, fireImmediately: true);
 
     File pringlesImg = File(
       p.normalize(p.absolute(p.join("test", "test_assets", "pringles.png"))),
