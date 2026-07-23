@@ -1,8 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:snackautomat/presentation/vending_screen.dart';
 
-void main() {
+Future main() async {
+  if (Platform.isWindows || Platform.isLinux) {
+    // Initialize FFI
+    sqfliteFfiInit();
+  }
+
+  databaseFactory = databaseFactoryFfi;
+
   runApp(ProviderScope(child: const MyApp()));
 }
 
