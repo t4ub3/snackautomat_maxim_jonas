@@ -14,6 +14,6 @@ class SnackList extends _$SnackList {
   Future<void> addSnack(Snack snack) async {
     final created = await ref.read(snackRepositoryProvider).createSnack(snack);
     final current = await future;
-    //state = AsyncData([...current, created]);
+    state = AsyncData([...current, created]);
   }
 }

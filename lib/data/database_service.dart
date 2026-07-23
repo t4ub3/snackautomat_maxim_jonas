@@ -34,9 +34,9 @@ class DatabaseService {
     return db;
   }
 
-  Future<void> addSnack(SnackDbModel snack) async {
+  Future<int> addSnack(SnackDbModel snack) async {
     final db = await database;
-    await db.insert(
+    return await db.insert(
       _snackTableName,
       {
         _nameColumnName: snack.name,
@@ -59,5 +59,21 @@ class DatabaseService {
         );
       }).toList(),
     );
+  }
+
+  Future<SnackDbModel> getById(int id) async {
+    final db = await database;
+    final data = await db.query(_snackTableName, where: "id = $id");
+    final results = await Future.wait(
+      data.map((row) async {
+        return SnackDbModel(
+          row[_idColumnName] as int,
+          row[_nameColumnName] as String,
+          row[_priceColumnName] as double,
+          row[_fileAsBase64ColumnName] as String,
+        );
+      }).toList(),
+    );
+    return results.first;
   }
 }

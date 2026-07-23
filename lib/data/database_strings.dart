@@ -53,6 +53,12 @@ $_sumColumnName GENERATED ALWAYS AS (($_5ctCountColumnName * 5) + ($_10ctCountCo
 );
 ''';
 
+// SQL STATEMENTS - QUERIES
+
+String _getById(int id, String table) {
+  return "SELECT * FROM $table WHERE id = $id";
+}
+
 // CONSTANT NAMES OF DB, TABLES AND COLUMNS
 
 const String _dbName = "snackautomat_db";

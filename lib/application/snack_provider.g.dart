@@ -13,7 +13,7 @@ part of 'snack_provider.dart';
 final snackListProvider = SnackListProvider._();
 
 final class SnackListProvider
-    extends $AsyncNotifierProvider<SnackList, List<Snack>?> {
+    extends $AsyncNotifierProvider<SnackList, List<Snack>> {
   SnackListProvider._()
     : super(
         from: null,
@@ -33,19 +33,19 @@ final class SnackListProvider
   SnackList create() => SnackList();
 }
 
-String _$snackListHash() => r'07d68a829e35f6cb38f4e572bf404eed245615d4';
+String _$snackListHash() => r'46c5333e6f19c4a8fc9e117138c630d6cbf4bde4';
 
-abstract class _$SnackList extends $AsyncNotifier<List<Snack>?> {
-  FutureOr<List<Snack>?> build();
+abstract class _$SnackList extends $AsyncNotifier<List<Snack>> {
+  FutureOr<List<Snack>> build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<List<Snack>?>, List<Snack>?>;
+    final ref = this.ref as $Ref<AsyncValue<List<Snack>>, List<Snack>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<List<Snack>?>, List<Snack>?>,
-              AsyncValue<List<Snack>?>,
+              AnyNotifier<AsyncValue<List<Snack>>, List<Snack>>,
+              AsyncValue<List<Snack>>,
               Object?,
               Object?
             >;

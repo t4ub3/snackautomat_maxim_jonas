@@ -49,4 +49,4 @@ final class SnackRepositoryProvider
   }
 }
 
-String _$snackRepositoryHash() => r'68a16a31d30e3cc27c3e72900858a7245110a7f9';
+String _$snackRepositoryHash() => r'82f42ebc659a9b8e2bdd4e783403dbbc95636a96';

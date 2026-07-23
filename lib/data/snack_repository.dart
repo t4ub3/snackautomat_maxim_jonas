@@ -27,8 +27,9 @@ class SnackRepository {
     return [];
   }
 
-  Future<void> createSnack(Snack snack) async {
+  Future<Snack> createSnack(Snack snack) async {
     final SnackDbModel snackDb = await dbModelfromSnack(snack);
-    await _databaseService.addSnack(snackDb);
+    final id = await _databaseService.addSnack(snackDb);
+    return await snackFromDbModel(await _databaseService.getById(id));
   }
 }
