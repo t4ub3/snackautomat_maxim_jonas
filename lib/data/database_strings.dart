@@ -1,4 +1,4 @@
-part of 'database_service.dart';
+part of '../services/database_service.dart';
 
 // SQL STATEMENTS - INIT TABLES
 

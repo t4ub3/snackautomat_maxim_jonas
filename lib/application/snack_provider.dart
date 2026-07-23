@@ -16,4 +16,16 @@ class SnackList extends _$SnackList {
     final current = await future;
     state = AsyncData([...current, created]);
   }
+
+  Future<void> addSnacks(List<Snack> snacks) async {
+    final List<Snack> createdSnacks = [];
+    for (var snack in snacks) {
+      final created = await ref
+          .read(snackRepositoryProvider)
+          .createSnack(snack);
+      createdSnacks.add(created);
+    }
+    final current = await future;
+    state = AsyncData([...current, ...createdSnacks]);
+  }
 }

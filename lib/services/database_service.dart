@@ -4,7 +4,7 @@ import 'package:snackautomat/data/snack_db_model.dart';
 import 'package:snackautomat/models/snack.dart';
 import 'package:sqflite/sqflite.dart';
 
-part "database_strings.dart";
+part "../data/database_strings.dart";
 
 class DatabaseService {
   static Database? _db;
