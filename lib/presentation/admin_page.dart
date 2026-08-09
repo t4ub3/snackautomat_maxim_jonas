@@ -312,18 +312,30 @@ class AdminPage extends StatelessWidget {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text(
-                                'Bist du dir sicher?',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              content: Text(
-                                'Alle Daten (Snacks, Geld) werden gelöscht!',
-                                textAlign: TextAlign.center,
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Bist du dir sicher?',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Alle Daten (Snacks, Geld) werden gelöscht!',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
                               ),
                               actions: [
                                 ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
                                   child: Text('Abbrechen'),
                                 ),
                                 ElevatedButton(
@@ -331,7 +343,13 @@ class AdminPage extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red,
                                   ),
-                                  child: Text('Reset'),
+                                  child: Text(
+                                    'RESET',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ],
                             );
@@ -342,9 +360,9 @@ class AdminPage extends StatelessWidget {
                         backgroundColor: Colors.red,
                       ),
                       child: Text(
-                        "Reset",
+                        "RESET",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
