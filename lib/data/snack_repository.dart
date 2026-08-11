@@ -15,7 +15,7 @@ class SnackRepository {
   final DatabaseService _databaseService;
 
   Future<List<Snack>> fetchSnacks() async {
-    final dbModels = await _databaseService.getAll();
+    final dbModels = await _databaseService.getAllSnacks();
     if (dbModels != null) {
       final snacks = Future.wait(
         dbModels.map((snackDb) async {
@@ -30,6 +30,6 @@ class SnackRepository {
   Future<Snack> createSnack(Snack snack) async {
     final SnackDbModel snackDb = await dbModelfromSnack(snack);
     final id = await _databaseService.addSnack(snackDb);
-    return await snackFromDbModel(await _databaseService.getById(id));
+    return await snackFromDbModel(await _databaseService.getSnackById(id));
   }
 }

@@ -46,7 +46,7 @@ class DatabaseService {
     );
   }
 
-  Future<List<SnackDbModel>?> getAll() async {
+  Future<List<SnackDbModel>?> getAllSnacks() async {
     final db = await database;
     final data = await db.query(_snackTableName);
     return Future.wait(
@@ -61,7 +61,7 @@ class DatabaseService {
     );
   }
 
-  Future<SnackDbModel> getById(int id) async {
+  Future<SnackDbModel> getSnackById(int id) async {
     final db = await database;
     final data = await db.query(_snackTableName, where: "id = $id");
     final results = await Future.wait(
@@ -75,5 +75,22 @@ class DatabaseService {
       }).toList(),
     );
     return results.first;
+  }
+
+  Future<int> addTransaction(Transaction transaction) async {
+    final db = await database;
+    return await db.insert(
+      _transactionTableName,
+      {
+        _descriptionColumnName: transaction.description,
+_isIncomeColumnName transaction.id,
+_5ctCountColumnName INTEGER NOT NULL DEFAULT 0,
+_10ctCountColumnName INTEGER NOT NULL DEFAULT 0,
+_20ctCountColumnName INTEGER NOT NULL DEFAULT 0,
+_50ctCountColumnName INTEGER NOT NULL DEFAULT 0,
+_1eurCountColumnName INTEGER NOT NULL DEFAULT 0,
+_2eurCountColumnName 
+      },
+    );
   }
 }
