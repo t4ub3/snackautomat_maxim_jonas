@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
-part 'transaction.freezed.dart';
+part 'transfer.freezed.dart';
 
 @freezed
-abstract class Transaction with _$Transaction {
-  const factory Transaction({
+abstract class Transfer with _$Transfer {
+  const factory Transfer({
     int? id,
     required String description,
     required bool isIncome,
@@ -17,5 +17,5 @@ abstract class Transaction with _$Transaction {
     required int eur1Amount,
     required int eur2Amount,
     required int sumInCt,
-  }) = _Transaction;
+  }) = _Transfer;
 }

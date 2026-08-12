@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:path/path.dart';
 import 'package:snackautomat/data/snack_db_model.dart';
 import 'package:snackautomat/models/snack.dart';
+import 'package:snackautomat/models/transfer.dart';
 import 'package:sqflite/sqflite.dart';
 
 part "../data/database_strings.dart";
@@ -77,19 +78,19 @@ class DatabaseService {
     return results.first;
   }
 
-  Future<int> addTransaction(Transaction transaction) async {
+  Future<int> addTransfer(Transfer transfer) async {
     final db = await database;
     return await db.insert(
       _transactionTableName,
       {
-        _descriptionColumnName: transaction.description,
-_isIncomeColumnName transaction.id,
-_5ctCountColumnName INTEGER NOT NULL DEFAULT 0,
-_10ctCountColumnName INTEGER NOT NULL DEFAULT 0,
-_20ctCountColumnName INTEGER NOT NULL DEFAULT 0,
-_50ctCountColumnName INTEGER NOT NULL DEFAULT 0,
-_1eurCountColumnName INTEGER NOT NULL DEFAULT 0,
-_2eurCountColumnName 
+        _descriptionColumnName: transfer.description,
+        _isIncomeColumnName: transfer.isIncome ? 1 : 0,
+        _5ctCountColumnName: transfer.ct5Amount,
+        _10ctCountColumnName: transfer.ct10Amount,
+        _20ctCountColumnName: transfer.ct20Amount,
+        _50ctCountColumnName: transfer.ct50Amount,
+        _1eurCountColumnName: transfer.eur1Amount,
+        _2eurCountColumnName: transfer.eur2Amount,
       },
     );
   }
