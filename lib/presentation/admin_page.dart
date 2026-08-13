@@ -17,9 +17,6 @@ class AdminPage extends StatelessWidget {
     Snacks(name: 'Cookie', price: '1.50 €', stock: 6),
     Snacks(name: 'Cake', price: '1.50 €', stock: 2),
     Snacks(name: 'Ice Cream', price: '1.70 €', stock: 5),
-    Snacks(name: 'Drink', price: '1.80 €', stock: 7),
-    Snacks(name: 'Egg', price: '0.50 €', stock: 5),
-    Snacks(name: 'Kaugummi', price: '0.80 €', stock: 6),
   ];
 
   AdminPage({super.key});
@@ -301,6 +298,71 @@ class AdminPage extends StatelessWidget {
                         'Einzahlen',
                         style: TextStyle(
                           color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Bist du dir sicher?',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Alle Daten (Snacks, Geld) werden gelöscht!',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Abbrechen'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                  child: Text(
+                                    'RESET',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      child: Text(
+                        "RESET",
+                        style: TextStyle(
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
