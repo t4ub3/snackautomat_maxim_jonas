@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:snackautomat/application/snack_provider.dart';
 import 'package:snackautomat/presentation/admin_page.dart';
 import 'package:snackautomat/presentation/helpers.dart';
 
-class Snackautomat extends StatelessWidget {
+class Snackautomat extends ConsumerWidget {
   Snackautomat({super.key});
 
-  final List<Snack> mySnacks = [
-    Snack(icon: Icons.fastfood, price: '1.50€'),
-    Snack(icon: Icons.donut_large, price: '1.50€'),
-    Snack(icon: Icons.bakery_dining, price: '1.50€'),
-    Snack(icon: Icons.cookie, price: '1.50€'),
-    Snack(icon: Icons.cake, price: '1.50€'),
-    Snack(icon: Icons.icecream, price: '1.50€'),
-    Snack(icon: Icons.breakfast_dining, price: '1.50€'),
-    Snack(icon: Icons.local_drink, price: '1.50€'),
-    Snack(icon: Icons.egg, price: '1.50€'),
-  ];
+  //   final List<Snack> mySnacks = [
+  //     Snack(icon: Icons.fastfood, price: '1.50€'),
+  //     Snack(icon: Icons.donut_large, price: '1.50€'),
+  //     Snack(icon: Icons.bakery_dining, price: '1.50€'),
+  //     Snack(icon: Icons.cookie, price: '1.50€'),
+  //     Snack(icon: Icons.cake, price: '1.50€'),
+  //     Snack(icon: Icons.icecream, price: '1.50€'),
+  //     Snack(icon: Icons.breakfast_dining, price: '1.50€'),
+  //     Snack(icon: Icons.local_drink, price: '1.50€'),
+  //     Snack(icon: Icons.egg, price: '1.50€'),
+  //   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final snacks = ref.watch(snackListProvider);
     return Scaffold(
       backgroundColor: const Color(0xFFF5E6F8),
       body: Row(
@@ -38,21 +41,32 @@ class Snackautomat extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    // 3x3 Gitter für Produkte
-                    Expanded(
-                      child: GridView.count(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        children: mySnacks
-                            .map(
-                              (snack) => ProduktFach(
-                                snack: snack,
-                              ),
-                            )
-                            .toList(),
-                      ),
+                    snacks.when(
+                      data: (snacks) {
+                        return Expanded(
+                          child: GridView.count(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            children: snacks!
+                                .map(
+                                  (snack) => ProduktFach(
+                                    snack: snack,
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        );
+                      },
+                      error: (error, stackTrace) {
+                        return Text("${error.toString()}\n$stackTrace");
+                      },
+                      loading: () {
+                        return Text("loading");
+                      },
                     ),
+
+                    // 3x3 Gitter für Produkte
                     const SizedBox(height: 20),
                     // Warenausgabe
                     Container(
