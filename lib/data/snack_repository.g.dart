@@ -14,8 +14,12 @@ final snackRepositoryProvider = SnackRepositoryProvider._();
 
 final class SnackRepositoryProvider
     extends
-        $FunctionalProvider<SnackRepository, SnackRepository, SnackRepository>
-    with $Provider<SnackRepository> {
+        $FunctionalProvider<
+          DatabaseRepository,
+          DatabaseRepository,
+          DatabaseRepository
+        >
+    with $Provider<DatabaseRepository> {
   SnackRepositoryProvider._()
     : super(
         from: null,
@@ -32,21 +36,22 @@ final class SnackRepositoryProvider
 
   @$internal
   @override
-  $ProviderElement<SnackRepository> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<DatabaseRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
-  SnackRepository create(Ref ref) {
+  DatabaseRepository create(Ref ref) {
     return snackRepository(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(SnackRepository value) {
+  Override overrideWithValue(DatabaseRepository value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<SnackRepository>(value),
+      providerOverride: $SyncValueProvider<DatabaseRepository>(value),
     );
   }
 }
 
-String _$snackRepositoryHash() => r'82f42ebc659a9b8e2bdd4e783403dbbc95636a96';
+String _$snackRepositoryHash() => r'f61974562d1c2fab26e734d84200896a5bdd87a9';

@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:snackautomat/models/transfer.dart';
 import 'package:snackautomat/services/database_service.dart';
 import 'package:snackautomat/data/snack_db_model.dart';
 import 'package:snackautomat/models/snack.dart';
@@ -6,12 +7,12 @@ import 'package:snackautomat/models/snack.dart';
 part "snack_repository.g.dart";
 
 @riverpod
-SnackRepository snackRepository(Ref ref) {
-  return SnackRepository(DatabaseService.db);
+DatabaseRepository snackRepository(Ref ref) {
+  return DatabaseRepository(DatabaseService.db);
 }
 
-class SnackRepository {
-  SnackRepository(this._databaseService);
+class DatabaseRepository {
+  DatabaseRepository(this._databaseService);
   final DatabaseService _databaseService;
 
   Future<List<Snack>> fetchSnacks() async {
@@ -31,5 +32,10 @@ class SnackRepository {
     final SnackDbModel snackDb = await dbModelfromSnack(snack);
     final id = await _databaseService.addSnack(snackDb);
     return await snackFromDbModel(await _databaseService.getSnackById(id));
+  }
+
+  Future<Transfer> createTransfer(Transfer transfer) async {
+    final id = await _databaseService.addTransfer(transfer);
+    return await _databaseService.getTransferById(id);
   }
 }

@@ -94,4 +94,26 @@ class DatabaseService {
       },
     );
   }
+
+  Future<Transfer> getTransferById(int id) async {
+    final db = await database;
+    final data = await db.query(_transactionTableName, where: "id = $id");
+    final results = await Future.wait(
+      data.map((row) async {
+        return Transfer(
+          id: row[_idColumnName] as int,
+          description: row[_descriptionColumnName] as String,
+          isIncome: row[_isIncomeColumnName] as bool,
+          ct5Amount: row[_5ctCountColumnName] as int,
+          ct10Amount: row[_10ctCountColumnName] as int,
+          ct20Amount: row[_20ctCountColumnName] as int,
+          ct50Amount: row[_50ctCountColumnName] as int,
+          eur1Amount: row[_1eurCountColumnName] as int,
+          eur2Amount: row[_2eurCountColumnName] as int,
+          sumInCt: row[_sumColumnName] as int,
+        );
+      }).toList(),
+    );
+    return results.first;
+  }
 }
