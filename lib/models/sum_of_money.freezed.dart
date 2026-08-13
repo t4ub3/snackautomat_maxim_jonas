@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SumOfMoney {
 
- List<Coin> get coins;
+ List get coins;
 /// Create a copy of SumOfMoney
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $SumOfMoneyCopyWith<$Res>  {
   factory $SumOfMoneyCopyWith(SumOfMoney value, $Res Function(SumOfMoney) _then) = _$SumOfMoneyCopyWithImpl;
 @useResult
 $Res call({
- List<Coin> coins
+ List coins
 });
 
 
@@ -65,7 +65,7 @@ class _$SumOfMoneyCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? coins = null,}) {
   return _then(_self.copyWith(
 coins: null == coins ? _self.coins : coins // ignore: cast_nullable_to_non_nullable
-as List<Coin>,
+as List,
   ));
 }
 
@@ -150,7 +150,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<Coin> coins)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List coins)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SumOfMoney() when $default != null:
 return $default(_that.coins);case _:
@@ -171,7 +171,7 @@ return $default(_that.coins);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<Coin> coins)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List coins)  $default,) {final _that = this;
 switch (_that) {
 case _SumOfMoney():
 return $default(_that.coins);case _:
@@ -191,7 +191,7 @@ return $default(_that.coins);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<Coin> coins)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List coins)?  $default,) {final _that = this;
 switch (_that) {
 case _SumOfMoney() when $default != null:
 return $default(_that.coins);case _:
@@ -206,11 +206,11 @@ return $default(_that.coins);case _:
 
 
 class _SumOfMoney implements SumOfMoney {
-  const _SumOfMoney({required final  List<Coin> coins}): _coins = coins;
+  const _SumOfMoney({required final  List coins}): _coins = coins;
   
 
- final  List<Coin> _coins;
-@override List<Coin> get coins {
+ final  List _coins;
+@override List get coins {
   if (_coins is EqualUnmodifiableListView) return _coins;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_coins);
@@ -247,7 +247,7 @@ abstract mixin class _$SumOfMoneyCopyWith<$Res> implements $SumOfMoneyCopyWith<$
   factory _$SumOfMoneyCopyWith(_SumOfMoney value, $Res Function(_SumOfMoney) _then) = __$SumOfMoneyCopyWithImpl;
 @override @useResult
 $Res call({
- List<Coin> coins
+ List coins
 });
 
 
@@ -267,7 +267,7 @@ class __$SumOfMoneyCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? coins = null,}) {
   return _then(_SumOfMoney(
 coins: null == coins ? _self._coins : coins // ignore: cast_nullable_to_non_nullable
-as List<Coin>,
+as List,
   ));
 }
 

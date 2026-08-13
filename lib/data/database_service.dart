@@ -1,7 +1,7 @@
-import 'dart:convert';
+
 import 'package:path/path.dart';
 import 'package:snackautomat/data/snack_db_model.dart';
-import 'package:snackautomat/models/snack.dart';
+
 import 'package:sqflite/sqflite.dart';
 
 part "database_strings.dart";

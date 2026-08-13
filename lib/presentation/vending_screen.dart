@@ -5,7 +5,7 @@ import 'package:snackautomat/presentation/admin_page.dart';
 import 'package:snackautomat/presentation/helpers.dart';
 
 class Snackautomat extends ConsumerWidget {
-  Snackautomat({super.key});
+  const Snackautomat({super.key});
 
   //   final List<Snack> mySnacks = [
   //     Snack(icon: Icons.fastfood, price: '1.50€'),
@@ -22,6 +22,7 @@ class Snackautomat extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final snacks = ref.watch(snackListProvider);
+    final selectedSnack = ref.watch(selectedSnackProvider);
     return Scaffold(
       backgroundColor: const Color(0xFFF5E6F8),
       body: Row(
@@ -52,6 +53,11 @@ class Snackautomat extends ConsumerWidget {
                                 .map(
                                   (snack) => ProduktFach(
                                     snack: snack,
+                                    onTap: () {
+                                      ref
+                                          .read(selectedSnackProvider.notifier)
+                                          .select(snack);
+                                    },
                                   ),
                                 )
                                 .toList(),
@@ -128,9 +134,11 @@ class Snackautomat extends ConsumerWidget {
                       color: const Color(0xFFEDF7ED),
                       border: Border.all(color: Colors.black, width: 2),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        'Bitte wählen Sie ein Produkt ...',
+                        selectedSnack != null
+                            ? '${selectedSnack.price}€'
+                            : 'Bitte wählen Sie ein Produkt ...',
                         style: TextStyle(
                           color: Colors.green,
                           fontSize: 16,
