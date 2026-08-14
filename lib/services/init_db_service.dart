@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:snackautomat/application/snack_provider.dart';
 import 'package:snackautomat/models/snack.dart';
+import 'package:snackautomat/models/transfer.dart';
 
 Future<void> resetAppdataToDefault() async {
   final container = ProviderContainer.test();
@@ -43,4 +44,18 @@ Snack ritterSport = Snack(
   name: "ritterSport",
   price: 1.5,
   image: _getImg("ritterSport"),
+);
+
+// default money
+
+Transfer baseStock = Transfer(
+  description: "set base money stock",
+  isIncome: true,
+  ct5Amount: 10,
+  ct10Amount: 10,
+  ct20Amount: 5,
+  ct50Amount: 4,
+  eur1Amount: 5,
+  eur2Amount: 2,
+  sumInCt: 1350,
 );

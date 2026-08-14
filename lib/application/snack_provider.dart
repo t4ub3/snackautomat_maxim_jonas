@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:snackautomat/data/snack_repository.dart';
+import 'package:snackautomat/data/database_repository.dart';
 import 'package:snackautomat/models/snack.dart';
 
 part "snack_provider.g.dart";

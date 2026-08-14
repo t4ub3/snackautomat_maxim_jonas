@@ -4,7 +4,7 @@ import 'package:snackautomat/services/database_service.dart';
 import 'package:snackautomat/data/snack_db_model.dart';
 import 'package:snackautomat/models/snack.dart';
 
-part "snack_repository.g.dart";
+part "database_repository.g.dart";
 
 @riverpod
 DatabaseRepository snackRepository(Ref ref) {

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'snack_repository.dart';
+part of 'database_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
