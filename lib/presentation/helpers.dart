@@ -3,10 +3,12 @@ import 'package:snackautomat/models/snack.dart';
 
 class Button extends StatelessWidget {
   final String text;
+  final VoidCallback onPressed;
 
   const Button({
     super.key,
     required this.text,
+    required this.onPressed,
   });
 
   @override
@@ -14,7 +16,7 @@ class Button extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton(
-        onPressed: () {},
+        onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.grey[400],
           foregroundColor: Colors.black,

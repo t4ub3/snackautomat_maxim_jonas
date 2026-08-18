@@ -49,7 +49,7 @@ abstract class _$SnackList extends $AsyncNotifier<List<Snack>> {
               Object?,
               Object?
             >;
-    return element.handleCreate(ref, build); 
+    return element.handleCreate(ref, build);
   }
 }
 
