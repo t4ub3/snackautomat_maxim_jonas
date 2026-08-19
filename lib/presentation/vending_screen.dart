@@ -144,8 +144,18 @@ class Snackautomat extends ConsumerWidget {
                         vending
                             ? 'Bitte Snack entnehmen!'
                             : selectedSnack != null
-                            ? insertedMoney.getValueInCents() > 0
-                                  ? 'Preis: ${selectedSnack.price}€\nNoch zu zahlen: ${((selectedSnack.price * 100 - insertedMoney.getValueInCents()) / 100).toStringAsFixed(2)}€'
+                            ? insertedMoney.getValueInCents() >=
+                                      (selectedSnack.price * 100).toInt()
+                                  ? exchange.getValueInCents() ==
+                                            insertedMoney.getValueInCents() -
+                                                (selectedSnack.price * 100)
+                                                    .toInt()
+                                        ? 'Preis: ${selectedSnack.price}€'
+                                        : 'Kein Wechselgeld verfügbar!'
+                                  : insertedMoney.getValueInCents() > 0
+                                  ? 'Preis: ${selectedSnack.price}€\n'
+                                        'Noch zu zahlen: '
+                                        '${((selectedSnack.price * 100 - insertedMoney.getValueInCents()) / 100).toStringAsFixed(2)}€'
                                   : 'Preis: ${selectedSnack.price}€'
                             : 'Bitte wählen Sie ein Produkt ...',
                         style: TextStyle(
@@ -283,7 +293,7 @@ class Snackautomat extends ConsumerWidget {
                         ),
                         child: Center(
                           child: Text(
-                            '${(exchange.getValueInCents() / 100).toStringAsFixed(2)} €',
+                            '${(ref.read(vendingProvider.notifier).exchange.getValueInCents() / 100).toStringAsFixed(2)} €',
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,

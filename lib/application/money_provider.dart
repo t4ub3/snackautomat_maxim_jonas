@@ -66,9 +66,9 @@ class CoinStock extends _$CoinStock {
       count200ct: 5,
       count100ct: 5,
       count50ct: 10,
-      count20ct: 10,
-      count10ct: 10,
-      count5ct: 10,
+      count20ct: 1,
+      count10ct: 0,
+      count5ct: 0,
     );
   }
 }

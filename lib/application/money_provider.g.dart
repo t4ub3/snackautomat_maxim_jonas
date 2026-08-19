@@ -92,7 +92,7 @@ final class CoinStockProvider extends $NotifierProvider<CoinStock, SumOfMoney> {
   }
 }
 
-String _$coinStockHash() => r'703b2998bc63b57143e2cf78abfd0c4e6ab34719';
+String _$coinStockHash() => r'f874a5f21c4f4b31879807bf242d594611634c88';
 
 abstract class _$CoinStock extends $Notifier<SumOfMoney> {
   SumOfMoney build();

@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:snackautomat/application/money_provider.dart';
 import 'package:snackautomat/application/snack_provider.dart';
+import 'package:snackautomat/models/sum_of_money.dart';
 
 part 'vending_provider.g.dart';
 
@@ -11,6 +12,15 @@ class Vending extends _$Vending {
   bool build() {
     return false;
   }
+
+  SumOfMoney exchange = SumOfMoney(
+    count200ct: 0,
+    count100ct: 0,
+    count50ct: 0,
+    count20ct: 0,
+    count10ct: 0,
+    count5ct: 0,
+  );
 
   void buySnack() {
     final selectedSnack = ref.read(selectedSnackProvider);
@@ -24,14 +34,23 @@ class Vending extends _$Vending {
     final priceInCents = (selectedSnack.price * 100).toInt();
     final insertedInCents = insertedMoney.getValueInCents();
 
+    // Nicht genug Geld
     if (insertedInCents < priceInCents) {
       return;
     }
 
+    // Benötigtes Wechselgeld
+    final requiredExchange = insertedInCents - priceInCents;
+
     // Wechselgeld berechnen
-    final exchange = ref.read(
+    exchange = ref.read(
       calcExchangeProvider(coinStock, insertedMoney),
     );
+
+    // Prüfen, ob das benötigte Wechselgeld gebildet werden kann
+    if (exchange.getValueInCents() != requiredExchange) {
+      return;
+    }
 
     // Kauf erfolgreich
     state = true;
@@ -42,5 +61,14 @@ class Vending extends _$Vending {
 
   void reset() {
     state = false;
+
+    exchange = SumOfMoney(
+      count200ct: 0,
+      count100ct: 0,
+      count50ct: 0,
+      count20ct: 0,
+      count10ct: 0,
+      count5ct: 0,
+    );
   }
 }
