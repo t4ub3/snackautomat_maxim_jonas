@@ -52,3 +52,55 @@ abstract class _$SnackList extends $AsyncNotifier<List<Snack>> {
     return element.handleCreate(ref, build);
   }
 }
+
+@ProviderFor(SelectedSnack)
+final selectedSnackProvider = SelectedSnackProvider._();
+
+final class SelectedSnackProvider
+    extends $NotifierProvider<SelectedSnack, Snack?> {
+  SelectedSnackProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'selectedSnackProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$selectedSnackHash();
+
+  @$internal
+  @override
+  SelectedSnack create() => SelectedSnack();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Snack? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Snack?>(value),
+    );
+  }
+}
+
+String _$selectedSnackHash() => r'ac21f57f79a936dbac74d1a8d9ab30d0b297ebcb';
+
+abstract class _$SelectedSnack extends $Notifier<Snack?> {
+  Snack? build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<Snack?, Snack?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Snack?, Snack?>,
+              Snack?,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}

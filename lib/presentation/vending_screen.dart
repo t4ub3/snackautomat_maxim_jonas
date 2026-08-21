@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:snackautomat/application/money_provider.dart';
 import 'package:snackautomat/application/snack_provider.dart';
+import 'package:snackautomat/application/vending_provider.dart';
 import 'package:snackautomat/presentation/admin_page.dart';
 import 'package:snackautomat/presentation/helpers.dart';
 
 class Snackautomat extends ConsumerWidget {
-  Snackautomat({super.key});
-
-  //   final List<Snack> mySnacks = [
-  //     Snack(icon: Icons.fastfood, price: '1.50€'),
-  //     Snack(icon: Icons.donut_large, price: '1.50€'),
-  //     Snack(icon: Icons.bakery_dining, price: '1.50€'),
-  //     Snack(icon: Icons.cookie, price: '1.50€'),
-  //     Snack(icon: Icons.cake, price: '1.50€'),
-  //     Snack(icon: Icons.icecream, price: '1.50€'),
-  //     Snack(icon: Icons.breakfast_dining, price: '1.50€'),
-  //     Snack(icon: Icons.local_drink, price: '1.50€'),
-  //     Snack(icon: Icons.egg, price: '1.50€'),
-  //   ];
+  const Snackautomat({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final snacks = ref.watch(snackListProvider);
+    final selectedSnack = ref.watch(selectedSnackProvider);
+    final insertedMoney = ref.watch(insertedMoneyProvider);
+    final vending = ref.watch(vendingProvider);
+    final coinStock = ref.watch(coinStockProvider);
+    final exchange = ref.watch(
+      calcExchangeProvider(coinStock, insertedMoney),
+    );
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5E6F8),
       body: Row(
@@ -52,6 +50,19 @@ class Snackautomat extends ConsumerWidget {
                                 .map(
                                   (snack) => ProduktFach(
                                     snack: snack,
+                                    onTap: () {
+                                      ref
+                                          .read(selectedSnackProvider.notifier)
+                                          .select(snack);
+
+                                      ref
+                                          .read(vendingProvider.notifier)
+                                          .reset();
+
+                                      ref
+                                          .read(insertedMoneyProvider.notifier)
+                                          .reset();
+                                    },
                                   ),
                                 )
                                 .toList(),
@@ -128,9 +139,25 @@ class Snackautomat extends ConsumerWidget {
                       color: const Color(0xFFEDF7ED),
                       border: Border.all(color: Colors.black, width: 2),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        'Bitte wählen Sie ein Produkt ...',
+                        vending
+                            ? 'Bitte Snack entnehmen!'
+                            : selectedSnack != null
+                            ? insertedMoney.getValueInCents() >=
+                                      (selectedSnack.price * 100).toInt()
+                                  ? exchange.getValueInCents() ==
+                                            insertedMoney.getValueInCents() -
+                                                (selectedSnack.price * 100)
+                                                    .toInt()
+                                        ? 'Preis: ${selectedSnack.price}€'
+                                        : 'Kein Wechselgeld verfügbar!'
+                                  : insertedMoney.getValueInCents() > 0
+                                  ? 'Preis: ${selectedSnack.price}€\n'
+                                        'Noch zu zahlen: '
+                                        '${((selectedSnack.price * 100 - insertedMoney.getValueInCents()) / 100).toStringAsFixed(2)}€'
+                                  : 'Preis: ${selectedSnack.price}€'
+                            : 'Bitte wählen Sie ein Produkt ...',
                         style: TextStyle(
                           color: Colors.green,
                           fontSize: 16,
@@ -153,11 +180,30 @@ class Snackautomat extends ConsumerWidget {
                           mainAxisSpacing: 5,
                           crossAxisSpacing: 5,
                           children: [
-                            for (int i = 1; i <= 9; i++) Button(text: '$i'),
+                            for (int i = 1; i <= 9; i++)
+                              Button(
+                                text: '$i',
+                                onPressed: () {
+                                  if (i <= snacks.value!.length) {
+                                    final snack = snacks.value![i - 1];
+                                    ref
+                                        .read(selectedSnackProvider.notifier)
+                                        .select(snacks.value![i - 1]);
+                                    ref
+                                        .read(insertedMoneyProvider.notifier)
+                                        .reset();
+
+                                    ref.read(vendingProvider.notifier).reset();
+                                  }
+                                },
+                              ),
                           ],
                         ),
                         const SizedBox(height: 5),
-                        Button(text: 'bestätigen'),
+                        Button(
+                          text: 'bestätigen',
+                          onPressed: () {},
+                        ),
                       ],
                     ),
                   ),
@@ -191,14 +237,38 @@ class Snackautomat extends ConsumerWidget {
                             childAspectRatio: 1.5,
                             mainAxisSpacing: 5,
                             crossAxisSpacing: 5,
-                            children: [
-                              '5ct',
-                              '50ct',
-                              '10ct',
-                              '1€',
-                              '20ct',
-                              '2€',
-                            ].map((wert) => Button(text: wert)).toList(),
+                            children:
+                                [
+                                  '5ct',
+                                  '50ct',
+                                  '10ct',
+                                  '1€',
+                                  '20ct',
+                                  '2€',
+                                ].map((wert) {
+                                  int value = wert == '5ct'
+                                      ? 5
+                                      : wert == '10ct'
+                                      ? 10
+                                      : wert == '20ct'
+                                      ? 20
+                                      : wert == '50ct'
+                                      ? 50
+                                      : wert == '1€'
+                                      ? 100
+                                      : wert == '2€'
+                                      ? 200
+                                      : 0;
+
+                                  return Button(
+                                    text: wert,
+                                    onPressed: () {
+                                      ref
+                                          .read(insertedMoneyProvider.notifier)
+                                          .addCoin(value);
+                                    },
+                                  );
+                                }).toList(),
                           ),
                         ),
                       ],
@@ -220,6 +290,15 @@ class Snackautomat extends ConsumerWidget {
                           color: Colors.white,
                           border: Border.all(color: Colors.black, width: 2),
                           borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${(ref.read(vendingProvider.notifier).exchange.getValueInCents() / 100).toStringAsFixed(2)} €',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ],

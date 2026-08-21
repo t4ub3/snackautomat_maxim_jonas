@@ -29,3 +29,15 @@ class SnackList extends _$SnackList {
     state = AsyncData([...current, ...createdSnacks]);
   }
 }
+
+@riverpod
+class SelectedSnack extends _$SelectedSnack {
+  @override
+  Snack? build() {
+    return null;
+  }
+  
+  void select(Snack snack){
+    state = snack;
+  }
+}
