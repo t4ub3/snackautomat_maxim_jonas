@@ -9,10 +9,10 @@ part of 'database_repository.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(snackRepository)
-final snackRepositoryProvider = SnackRepositoryProvider._();
+@ProviderFor(databaseRepository)
+final databaseRepositoryProvider = DatabaseRepositoryProvider._();
 
-final class SnackRepositoryProvider
+final class DatabaseRepositoryProvider
     extends
         $FunctionalProvider<
           DatabaseRepository,
@@ -20,19 +20,19 @@ final class SnackRepositoryProvider
           DatabaseRepository
         >
     with $Provider<DatabaseRepository> {
-  SnackRepositoryProvider._()
+  DatabaseRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'snackRepositoryProvider',
+        name: r'databaseRepositoryProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$snackRepositoryHash();
+  String debugGetCreateSourceHash() => _$databaseRepositoryHash();
 
   @$internal
   @override
@@ -42,7 +42,7 @@ final class SnackRepositoryProvider
 
   @override
   DatabaseRepository create(Ref ref) {
-    return snackRepository(ref);
+    return databaseRepository(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -54,4 +54,5 @@ final class SnackRepositoryProvider
   }
 }
 
-String _$snackRepositoryHash() => r'f61974562d1c2fab26e734d84200896a5bdd87a9';
+String _$databaseRepositoryHash() =>
+    r'c9249d3a927bec5945b230fb9c394053ff6fdff2';

@@ -32,6 +32,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:snackautomat/application/snack_provider.dart';
 import 'package:snackautomat/application/vending_provider.dart';
+import 'package:snackautomat/data/database_repository.dart';
 import '../models/sum_of_money.dart';
 
 part 'money_provider.g.dart';
@@ -86,6 +87,19 @@ class InsertedMoney extends _$InsertedMoney {
       count10ct: 0,
       count5ct: 0,
     );
+  }
+
+  Future<void> resetStock() {
+    SumOfMoney defaultStock = SumOfMoney(
+      count200ct: 2,
+      count100ct: 5,
+      count50ct: 5,
+      count20ct: 5,
+      count10ct: 5,
+      count5ct: 5,
+    );
+    var data = ref.read(databaseRepositoryProvider).resetStockTo(defaultStock);
+    return data;
   }
 }
 

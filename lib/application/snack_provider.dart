@@ -8,11 +8,13 @@ part "snack_provider.g.dart";
 class SnackList extends _$SnackList {
   @override
   Future<List<Snack>> build() {
-    return ref.watch(snackRepositoryProvider).fetchSnacks();
+    return ref.watch(databaseRepositoryProvider).fetchSnacks();
   }
 
   Future<void> addSnack(Snack snack) async {
-    final created = await ref.read(snackRepositoryProvider).createSnack(snack);
+    final created = await ref
+        .read(databaseRepositoryProvider)
+        .createSnack(snack);
     final current = await future;
     state = AsyncData([...current, created]);
   }
@@ -21,7 +23,7 @@ class SnackList extends _$SnackList {
     final List<Snack> createdSnacks = [];
     for (var snack in snacks) {
       final created = await ref
-          .read(snackRepositoryProvider)
+          .read(databaseRepositoryProvider)
           .createSnack(snack);
       createdSnacks.add(created);
     }
@@ -36,8 +38,8 @@ class SelectedSnack extends _$SelectedSnack {
   Snack? build() {
     return null;
   }
-  
-  void select(Snack snack){
+
+  void select(Snack snack) {
     state = snack;
   }
 }

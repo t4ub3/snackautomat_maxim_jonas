@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:snackautomat/application/money_provider.dart';
+import 'package:snackautomat/data/database_repository.dart';
 
-class AdminPage extends StatelessWidget {
+class AdminPage extends ConsumerWidget {
   final List<Coin> coins = [
     Coin(name: '5 ct', stock: 20),
     Coin(name: '10 ct', stock: 15),
@@ -22,7 +25,7 @@ class AdminPage extends StatelessWidget {
   AdminPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5E6F8),
       appBar: AppBar(
@@ -339,7 +342,11 @@ class AdminPage extends StatelessWidget {
                                   child: Text('Abbrechen'),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    ref
+                                        .read(insertedMoneyProvider.notifier)
+                                        .resetStock();
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red,
                                   ),

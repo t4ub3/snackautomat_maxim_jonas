@@ -41,7 +41,7 @@ final class InsertedMoneyProvider
   }
 }
 
-String _$insertedMoneyHash() => r'9da8023f0f2d02deea3ca09af6ae4430a2022213';
+String _$insertedMoneyHash() => r'e3813b432d532e49f33e20273a2d9d5a0812daa7';
 
 abstract class _$InsertedMoney extends $Notifier<SumOfMoney> {
   SumOfMoney build();

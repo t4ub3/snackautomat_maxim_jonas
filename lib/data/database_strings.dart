@@ -59,6 +59,10 @@ String _getById(int id, String table) {
   return "SELECT * FROM $table WHERE id = $id";
 }
 
+String _getLatest(String table) {
+  return "select * from $table order by rowid desc LIMIT 1";
+}
+
 // CONSTANT NAMES OF DB, TABLES AND COLUMNS
 
 const String _dbName = "snackautomat_db";

@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:snackautomat/data/snack_db_model.dart';
 import 'package:snackautomat/models/snack.dart';
+import 'package:snackautomat/models/sum_of_money.dart';
 import 'package:snackautomat/models/transfer.dart';
 
 import 'package:sqflite/sqflite.dart';
@@ -115,5 +116,52 @@ class DatabaseService {
       }).toList(),
     );
     return results.first;
+  }
+
+  Future<void> deleteTransfers() async {
+    final db = await database;
+    await db.delete(_transactionTableName);
+  }
+
+  Future<SumOfMoney> getCurrentStock() async {
+    final db = await database;
+    final data = await db.query(
+      _moneyStockTableName,
+      orderBy: "rowid DESC",
+      limit: 1,
+    );
+    final results = await Future.wait(
+      data.map((row) async {
+        return SumOfMoney(
+          count5ct: row[_5ctCountColumnName] as int,
+          count10ct: row[_10ctCountColumnName] as int,
+          count20ct: row[_20ctCountColumnName] as int,
+          count50ct: row[_50ctCountColumnName] as int,
+          count100ct: row[_1eurCountColumnName] as int,
+          count200ct: row[_2eurCountColumnName] as int,
+        );
+      }).toList(),
+    );
+    return results.first;
+  }
+
+  Future<int> addStock(SumOfMoney money) async {
+    final db = await database;
+    return await db.insert(
+      _moneyStockTableName,
+      {
+        _5ctCountColumnName: money.count5ct,
+        _10ctCountColumnName: money.count10ct,
+        _20ctCountColumnName: money.count20ct,
+        _50ctCountColumnName: money.count50ct,
+        _1eurCountColumnName: money.count100ct,
+        _2eurCountColumnName: money.count200ct,
+      },
+    );
+  }
+
+  Future<void> deleteStock() async {
+    final db = await database;
+    await db.delete(_moneyStockTableName);
   }
 }
