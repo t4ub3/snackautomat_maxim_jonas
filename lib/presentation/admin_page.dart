@@ -346,6 +346,7 @@ class AdminPage extends ConsumerWidget {
                                     ref
                                         .read(insertedMoneyProvider.notifier)
                                         .resetStock();
+                                    Navigator.of(context).pop();
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red,

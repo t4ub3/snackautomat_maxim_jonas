@@ -33,6 +33,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:snackautomat/application/snack_provider.dart';
 import 'package:snackautomat/application/vending_provider.dart';
 import 'package:snackautomat/data/database_repository.dart';
+import 'package:snackautomat/models/transfer.dart';
 import '../models/sum_of_money.dart';
 
 part 'money_provider.g.dart';
@@ -89,17 +90,40 @@ class InsertedMoney extends _$InsertedMoney {
     );
   }
 
-  Future<void> resetStock() {
-    SumOfMoney defaultStock = SumOfMoney(
-      count200ct: 2,
-      count100ct: 5,
-      count50ct: 5,
-      count20ct: 5,
-      count10ct: 5,
-      count5ct: 5,
+  Future<Transfer> resetStock() async {
+    SumOfMoney currentStock = await ref
+        .read(databaseRepositoryProvider)
+        .getCurrentStock();
+    Transfer emptyStock = Transfer(
+      description: "RESET - empty Stock",
+      isIncome: false,
+      ct5Amount: currentStock.count5ct,
+      ct10Amount: currentStock.count10ct,
+      ct20Amount: currentStock.count20ct,
+      ct50Amount: currentStock.count50ct,
+      eur1Amount: currentStock.count100ct,
+      eur2Amount: currentStock.count200ct,
+      sumInCt: 0,
     );
-    var data = ref.read(databaseRepositoryProvider).resetStockTo(defaultStock);
-    return data;
+    ref.read(databaseRepositoryProvider).createTransfer(emptyStock);
+    Transfer setDefaultStock = Transfer(
+      description: "RESET - set default",
+      isIncome: true,
+      ct5Amount: 10,
+      ct10Amount: 10,
+      ct20Amount: 10,
+      ct50Amount: 10,
+      eur1Amount: 5,
+      eur2Amount: 5,
+      sumInCt: 0,
+    );
+    /**
+     * read current stock
+     * create transaction to set stock to 0
+     * check, if stock is 0
+     * create transaction for default stock
+     */
+    return ref.read(databaseRepositoryProvider).createTransfer(setDefaultStock);
   }
 }
 

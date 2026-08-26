@@ -81,7 +81,7 @@ class DatabaseService {
 
   Future<int> addTransfer(Transfer transfer) async {
     final db = await database;
-    return await db.insert(
+    int transferId = await db.insert(
       _transactionTableName,
       {
         _descriptionColumnName: transfer.description,
@@ -94,6 +94,18 @@ class DatabaseService {
         _2eurCountColumnName: transfer.eur2Amount,
       },
     );
+    SumOfMoney currentStock = await getCurrentStock();
+    final sign = transfer.isIncome ? 1 : -1;
+    SumOfMoney newStock = SumOfMoney(
+      count200ct: currentStock.count200ct + (sign * transfer.eur2Amount),
+      count100ct: currentStock.count100ct + (sign * transfer.eur1Amount),
+      count50ct: currentStock.count50ct + (sign * transfer.ct50Amount),
+      count20ct: currentStock.count20ct + (sign * transfer.ct20Amount),
+      count10ct: currentStock.count10ct + (sign * transfer.ct10Amount),
+      count5ct: currentStock.count5ct + (sign * transfer.ct5Amount),
+    );
+    final newStockId = addStock(newStock);
+    return transferId;
   }
 
   Future<Transfer> getTransferById(int id) async {
@@ -104,7 +116,7 @@ class DatabaseService {
         return Transfer(
           id: row[_idColumnName] as int,
           description: row[_descriptionColumnName] as String,
-          isIncome: row[_isIncomeColumnName] as bool,
+          isIncome: row[_isIncomeColumnName] == 1,
           ct5Amount: row[_5ctCountColumnName] as int,
           ct10Amount: row[_10ctCountColumnName] as int,
           ct20Amount: row[_20ctCountColumnName] as int,
@@ -130,6 +142,7 @@ class DatabaseService {
       orderBy: "rowid DESC",
       limit: 1,
     );
+
     final results = await Future.wait(
       data.map((row) async {
         return SumOfMoney(
@@ -147,9 +160,16 @@ class DatabaseService {
 
   Future<int> addStock(SumOfMoney money) async {
     final db = await database;
+    final latestTransaction = await db.query(
+      _transactionTableName,
+      orderBy: "rowid DESC",
+      limit: 1,
+    );
+    final latestTransactionId = latestTransaction[0][_idColumnName] as int;
     return await db.insert(
       _moneyStockTableName,
       {
+        _latestTransactionIdColumnName: latestTransactionId,
         _5ctCountColumnName: money.count5ct,
         _10ctCountColumnName: money.count10ct,
         _20ctCountColumnName: money.count20ct,
