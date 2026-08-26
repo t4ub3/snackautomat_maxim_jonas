@@ -63,12 +63,12 @@ class CoinStock extends _$CoinStock {
   @override
   SumOfMoney build() {
     return SumOfMoney(
-      count200ct: 5,
-      count100ct: 5,
+      count200ct: 10,
+      count100ct: 10,
       count50ct: 10,
-      count20ct: 1,
-      count10ct: 0,
-      count5ct: 0,
+      count20ct: 10,
+      count10ct: 10,
+      count5ct: 10,
     );
   }
 }

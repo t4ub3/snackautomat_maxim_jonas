@@ -24,8 +24,8 @@ class SelectedSnack extends _$SelectedSnack {
   Snack? build() {
     return null;
   }
-  
-  void select(Snack snack){
+
+  void select(Snack? snack) {
     state = snack;
   }
 }

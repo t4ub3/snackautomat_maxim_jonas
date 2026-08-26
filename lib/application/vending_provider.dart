@@ -1,5 +1,4 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
 import 'package:snackautomat/application/money_provider.dart';
 import 'package:snackautomat/application/snack_provider.dart';
 import 'package:snackautomat/models/sum_of_money.dart';
