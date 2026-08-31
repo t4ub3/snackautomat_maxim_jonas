@@ -46,7 +46,7 @@ class Snackautomat extends ConsumerWidget {
                             crossAxisCount: 3,
                             mainAxisSpacing: 10,
                             crossAxisSpacing: 10,
-                            children: snacks!
+                            children: snacks
                                 .map(
                                   (snack) => ProduktFach(
                                     snack: snack,

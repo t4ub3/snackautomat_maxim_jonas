@@ -1,6 +1,5 @@
 import 'package:path/path.dart';
 import 'package:snackautomat/data/snack_db_model.dart';
-import 'package:snackautomat/models/snack.dart';
 import 'package:snackautomat/models/sum_of_money.dart';
 import 'package:snackautomat/models/transfer.dart';
 

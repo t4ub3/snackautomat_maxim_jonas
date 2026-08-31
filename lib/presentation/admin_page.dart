@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:snackautomat/application/money_provider.dart';
-import 'package:snackautomat/data/database_repository.dart';
 
 class AdminPage extends ConsumerWidget {
   final List<Coin> coins = [
