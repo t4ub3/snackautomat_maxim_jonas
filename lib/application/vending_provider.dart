@@ -8,21 +8,28 @@ import 'package:snackautomat/models/transfer.dart';
 
 part 'vending_provider.g.dart';
 
+final _noMoney = SumOfMoney(
+  count200ct: 0,
+  count100ct: 0,
+  count50ct: 0,
+  count20ct: 0,
+  count10ct: 0,
+  count5ct: 0,
+);
+
+class VendingState {
+  const VendingState({required this.isDispensing, required this.exchange});
+
+  final bool isDispensing;
+  final SumOfMoney exchange;
+}
+
 @riverpod
 class Vending extends _$Vending {
   @override
-  bool build() {
-    return false;
+  VendingState build() {
+    return VendingState(isDispensing: false, exchange: _noMoney);
   }
-
-  SumOfMoney exchange = SumOfMoney(
-    count200ct: 0,
-    count100ct: 0,
-    count50ct: 0,
-    count20ct: 0,
-    count10ct: 0,
-    count5ct: 0,
-  );
 
   Future<void> buySnack() async {
     final selectedSnack = ref.read(selectedSnackProvider);
@@ -52,7 +59,7 @@ class Vending extends _$Vending {
     final coinStock = await ref.read(coinStockProvider.future);
 
     // Wechselgeld berechnen
-    exchange = ref.read(
+    final exchange = ref.read(
       calcExchangeProvider(coinStock, insertedMoney),
     );
 
@@ -102,22 +109,13 @@ class Vending extends _$Vending {
     ref.invalidate(coinStockProvider);
 
     // Kauf erfolgreich
-    state = true;
+    state = VendingState(isDispensing: true, exchange: exchange);
 
     // Eingezahltes Geld zurücksetzen
     ref.read(insertedMoneyProvider.notifier).reset();
   }
 
   void reset() {
-    state = false;
-
-    exchange = SumOfMoney(
-      count200ct: 0,
-      count100ct: 0,
-      count50ct: 0,
-      count20ct: 0,
-      count10ct: 0,
-      count5ct: 0,
-    );
+    state = VendingState(isDispensing: false, exchange: _noMoney);
   }
 }

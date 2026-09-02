@@ -85,7 +85,7 @@ final class SelectedSnackProvider
   }
 }
 
-String _$selectedSnackHash() => r'ac21f57f79a936dbac74d1a8d9ab30d0b297ebcb';
+String _$selectedSnackHash() => r'7b53121107820683bece2feccd43b69f19fb8698';
 
 abstract class _$SelectedSnack extends $Notifier<Snack?> {
   Snack? build();

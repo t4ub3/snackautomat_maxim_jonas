@@ -59,4 +59,8 @@ class SelectedSnack extends _$SelectedSnack {
   void select(Snack snack) {
     state = snack;
   }
+
+  void deselect() {
+    state = null;
+  }
 }

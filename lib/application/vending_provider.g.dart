@@ -12,7 +12,7 @@ part of 'vending_provider.dart';
 @ProviderFor(Vending)
 final vendingProvider = VendingProvider._();
 
-final class VendingProvider extends $NotifierProvider<Vending, bool> {
+final class VendingProvider extends $NotifierProvider<Vending, VendingState> {
   VendingProvider._()
     : super(
         from: null,
@@ -32,27 +32,27 @@ final class VendingProvider extends $NotifierProvider<Vending, bool> {
   Vending create() => Vending();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(bool value) {
+  Override overrideWithValue(VendingState value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<bool>(value),
+      providerOverride: $SyncValueProvider<VendingState>(value),
     );
   }
 }
 
-String _$vendingHash() => r'e970e6579e65c5b5bf388ef4fb0ba56d8d58602b';
+String _$vendingHash() => r'f784dee0226883d46610a58067aad1e0693c8484';
 
-abstract class _$Vending extends $Notifier<bool> {
-  bool build();
+abstract class _$Vending extends $Notifier<VendingState> {
+  VendingState build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<bool, bool>;
+    final ref = this.ref as $Ref<VendingState, VendingState>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<bool, bool>,
-              bool,
+              AnyNotifier<VendingState, VendingState>,
+              VendingState,
               Object?,
               Object?
             >;

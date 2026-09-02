@@ -207,4 +207,12 @@ class DatabaseService {
     final db = await database;
     await db.delete(_moneyStockTableName);
   }
+
+  Future<void> resetDatabase() async {
+    final db = await database;
+    await db.delete(_moneyStockTableName);
+    await db.delete(_transactionTableName);
+    await db.delete(_shelfTableName);
+    await db.delete(_snackTableName);
+  }
 }

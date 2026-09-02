@@ -15,7 +15,8 @@ class Snackautomat extends ConsumerWidget {
     final snacks = ref.watch(snackListProvider);
     final selectedSnack = ref.watch(selectedSnackProvider);
     final insertedMoney = ref.watch(insertedMoneyProvider);
-    final vending = ref.watch(vendingProvider);
+    final vendingState = ref.watch(vendingProvider);
+    final vending = vendingState.isDispensing;
     final coinStock =
         ref.watch(coinStockProvider).value ??
         SumOfMoney(
@@ -90,20 +91,58 @@ class Snackautomat extends ConsumerWidget {
                     // 3x3 Gitter für Produkte
                     const SizedBox(height: 20),
                     // Warenausgabe
-                    Container(
-                      width: double.infinity,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE3F2FD),
-                        border: Border.all(color: Colors.black, width: 2),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Warenausgabe',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    GestureDetector(
+                      onTap: () {
+                        if (vending) {
+                          ref.read(vendingProvider.notifier).reset();
+                          ref.read(selectedSnackProvider.notifier).deselect();
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE3F2FD),
+                          border: Border.all(color: Colors.black, width: 2),
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+
+                              child: Opacity(
+                                opacity: vending ? 0.0 : 1.0,
+                                child: const Text(
+                                  'Warenausgabe',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            if (vending && selectedSnack != null)
+                              TweenAnimationBuilder<double>(
+                                tween: Tween(begin: 0.0, end: 1.0),
+                                duration: const Duration(milliseconds: 600),
+                                curve: Curves.easeOutBack,
+                                builder: (context, value, child) {
+                                  return Transform.scale(
+                                    scale: value,
+                                    child: Image.file(
+                                      selectedSnack.image,
+                                      height: 85,
+                                    ),
+                                  );
+                                },
+                              ),
+                          ],
                         ),
                       ),
                     ),
@@ -305,7 +344,7 @@ class Snackautomat extends ConsumerWidget {
                         ),
                         child: Center(
                           child: Text(
-                            '${(ref.read(vendingProvider.notifier).exchange.getValueInCents() / 100).toStringAsFixed(2)} €',
+                            '${(vendingState.exchange.getValueInCents() / 100).toStringAsFixed(2)} €',
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
