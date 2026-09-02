@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Snack implements DiagnosticableTreeMixin {
 
- int? get id; String get name; double get price; File get image;
+ int? get id; String get name; double get price; File get image; int get amount;
 /// Create a copy of Snack
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,21 +26,21 @@ $SnackCopyWith<Snack> get copyWith => _$SnackCopyWithImpl<Snack>(this as Snack, 
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'Snack'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('price', price))..add(DiagnosticsProperty('image', image));
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('price', price))..add(DiagnosticsProperty('image', image))..add(DiagnosticsProperty('amount', amount));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Snack&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.price, price) || other.price == price)&&(identical(other.image, image) || other.image == image));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Snack&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.price, price) || other.price == price)&&(identical(other.image, image) || other.image == image)&&(identical(other.amount, amount) || other.amount == amount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,price,image);
+int get hashCode => Object.hash(runtimeType,id,name,price,image,amount);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'Snack(id: $id, name: $name, price: $price, image: $image)';
+  return 'Snack(id: $id, name: $name, price: $price, image: $image, amount: $amount)';
 }
 
 
@@ -51,7 +51,7 @@ abstract mixin class $SnackCopyWith<$Res>  {
   factory $SnackCopyWith(Snack value, $Res Function(Snack) _then) = _$SnackCopyWithImpl;
 @useResult
 $Res call({
- int? id, String name, double price, File image
+ int? id, String name, double price, File image, int amount
 });
 
 
@@ -68,13 +68,14 @@ class _$SnackCopyWithImpl<$Res>
 
 /// Create a copy of Snack
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? price = null,Object? image = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? price = null,Object? image = null,Object? amount = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
 as double,image: null == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
-as File,
+as File,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  double price,  File image)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  double price,  File image,  int amount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Snack() when $default != null:
-return $default(_that.id,_that.name,_that.price,_that.image);case _:
+return $default(_that.id,_that.name,_that.price,_that.image,_that.amount);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.id,_that.name,_that.price,_that.image);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  double price,  File image)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  double price,  File image,  int amount)  $default,) {final _that = this;
 switch (_that) {
 case _Snack():
-return $default(_that.id,_that.name,_that.price,_that.image);case _:
+return $default(_that.id,_that.name,_that.price,_that.image,_that.amount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.id,_that.name,_that.price,_that.image);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  double price,  File image)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  double price,  File image,  int amount)?  $default,) {final _that = this;
 switch (_that) {
 case _Snack() when $default != null:
-return $default(_that.id,_that.name,_that.price,_that.image);case _:
+return $default(_that.id,_that.name,_that.price,_that.image,_that.amount);case _:
   return null;
 
 }
@@ -215,13 +216,14 @@ return $default(_that.id,_that.name,_that.price,_that.image);case _:
 
 
 class _Snack with DiagnosticableTreeMixin implements Snack {
-  const _Snack({this.id, required this.name, required this.price, required this.image});
+  const _Snack({this.id, required this.name, required this.price, required this.image, this.amount = 0});
   
 
 @override final  int? id;
 @override final  String name;
 @override final  double price;
 @override final  File image;
+@override@JsonKey() final  int amount;
 
 /// Create a copy of Snack
 /// with the given fields replaced by the non-null parameter values.
@@ -234,21 +236,21 @@ _$SnackCopyWith<_Snack> get copyWith => __$SnackCopyWithImpl<_Snack>(this, _$ide
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'Snack'))
-    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('price', price))..add(DiagnosticsProperty('image', image));
+    ..add(DiagnosticsProperty('id', id))..add(DiagnosticsProperty('name', name))..add(DiagnosticsProperty('price', price))..add(DiagnosticsProperty('image', image))..add(DiagnosticsProperty('amount', amount));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Snack&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.price, price) || other.price == price)&&(identical(other.image, image) || other.image == image));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Snack&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.price, price) || other.price == price)&&(identical(other.image, image) || other.image == image)&&(identical(other.amount, amount) || other.amount == amount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,price,image);
+int get hashCode => Object.hash(runtimeType,id,name,price,image,amount);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'Snack(id: $id, name: $name, price: $price, image: $image)';
+  return 'Snack(id: $id, name: $name, price: $price, image: $image, amount: $amount)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$SnackCopyWith<$Res> implements $SnackCopyWith<$Res> {
   factory _$SnackCopyWith(_Snack value, $Res Function(_Snack) _then) = __$SnackCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String name, double price, File image
+ int? id, String name, double price, File image, int amount
 });
 
 
@@ -276,13 +278,14 @@ class __$SnackCopyWithImpl<$Res>
 
 /// Create a copy of Snack
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? price = null,Object? image = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? price = null,Object? image = null,Object? amount = null,}) {
   return _then(_Snack(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
 as double,image: null == image ? _self.image : image // ignore: cast_nullable_to_non_nullable
-as File,
+as File,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

@@ -33,7 +33,7 @@ final class SnackListProvider
   SnackList create() => SnackList();
 }
 
-String _$snackListHash() => r'46c5333e6f19c4a8fc9e117138c630d6cbf4bde4';
+String _$snackListHash() => r'de8ee1e9513abb82cf6a2cbbc5b5238ca7767a50';
 
 abstract class _$SnackList extends $AsyncNotifier<List<Snack>> {
   FutureOr<List<Snack>> build();
@@ -46,6 +46,58 @@ abstract class _$SnackList extends $AsyncNotifier<List<Snack>> {
             as $ClassProviderElement<
               AnyNotifier<AsyncValue<List<Snack>>, List<Snack>>,
               AsyncValue<List<Snack>>,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
+@ProviderFor(SelectedSnack)
+final selectedSnackProvider = SelectedSnackProvider._();
+
+final class SelectedSnackProvider
+    extends $NotifierProvider<SelectedSnack, Snack?> {
+  SelectedSnackProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'selectedSnackProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$selectedSnackHash();
+
+  @$internal
+  @override
+  SelectedSnack create() => SelectedSnack();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Snack? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Snack?>(value),
+    );
+  }
+}
+
+String _$selectedSnackHash() => r'7b53121107820683bece2feccd43b69f19fb8698';
+
+abstract class _$SelectedSnack extends $Notifier<Snack?> {
+  Snack? build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<Snack?, Snack?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Snack?, Snack?>,
+              Snack?,
               Object?,
               Object?
             >;

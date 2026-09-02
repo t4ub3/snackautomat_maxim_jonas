@@ -1,4 +1,4 @@
-part of 'database_service.dart';
+part of '../services/database_service.dart';
 
 // SQL STATEMENTS - INIT TABLES
 
@@ -8,7 +8,8 @@ CREATE TABLE $_snackTableName (
 $_idColumnName INTEGER PRIMARY KEY,
 $_nameColumnName TEXT NOT NULL,
 $_priceColumnName REAL NOT NULL,
-$_fileAsBase64ColumnName TEXT NOT NULL
+$_fileAsBase64ColumnName TEXT NOT NULL,
+$_amountColumnName INTEGER NOT NULL DEFAULT 0
 );
 ''';
 
@@ -59,6 +60,10 @@ String _getById(int id, String table) {
   return "SELECT * FROM $table WHERE id = $id";
 }
 
+String _getLatest(String table) {
+  return "select * from $table order by rowid desc LIMIT 1";
+}
+
 // CONSTANT NAMES OF DB, TABLES AND COLUMNS
 
 const String _dbName = "snackautomat_db";
@@ -69,6 +74,7 @@ const String _idColumnName = "id";
 const String _nameColumnName = "name";
 const String _priceColumnName = "price";
 const String _fileAsBase64ColumnName = "fileAsBase64";
+const String _amountColumnName = "amount";
 
 // shelf table
 const String _shelfTableName = "shelfs";

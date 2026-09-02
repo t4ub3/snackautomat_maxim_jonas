@@ -11,5 +11,6 @@ abstract class Snack with _$Snack {
     required String name,
     required double price,
     required File image,
+    @Default(0) int amount,
   }) = _Snack;
 }

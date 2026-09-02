@@ -1,0 +1,183 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'money_provider.dart';
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(InsertedMoney)
+final insertedMoneyProvider = InsertedMoneyProvider._();
+
+final class InsertedMoneyProvider
+    extends $NotifierProvider<InsertedMoney, SumOfMoney> {
+  InsertedMoneyProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'insertedMoneyProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$insertedMoneyHash();
+
+  @$internal
+  @override
+  InsertedMoney create() => InsertedMoney();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SumOfMoney value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SumOfMoney>(value),
+    );
+  }
+}
+
+String _$insertedMoneyHash() => r'd06c132bfaab02895692bf5a6bdd7162915b9d91';
+
+abstract class _$InsertedMoney extends $Notifier<SumOfMoney> {
+  SumOfMoney build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<SumOfMoney, SumOfMoney>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<SumOfMoney, SumOfMoney>,
+              SumOfMoney,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
+@ProviderFor(CoinStock)
+final coinStockProvider = CoinStockProvider._();
+
+final class CoinStockProvider
+    extends $AsyncNotifierProvider<CoinStock, SumOfMoney> {
+  CoinStockProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'coinStockProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$coinStockHash();
+
+  @$internal
+  @override
+  CoinStock create() => CoinStock();
+}
+
+String _$coinStockHash() => r'f96dab36c2f67dac5d579f6f6a77a699249c1b83';
+
+abstract class _$CoinStock extends $AsyncNotifier<SumOfMoney> {
+  FutureOr<SumOfMoney> build();
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<SumOfMoney>, SumOfMoney>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<SumOfMoney>, SumOfMoney>,
+              AsyncValue<SumOfMoney>,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(ref, build);
+  }
+}
+
+@ProviderFor(calcExchange)
+final calcExchangeProvider = CalcExchangeFamily._();
+
+final class CalcExchangeProvider
+    extends $FunctionalProvider<SumOfMoney, SumOfMoney, SumOfMoney>
+    with $Provider<SumOfMoney> {
+  CalcExchangeProvider._({
+    required CalcExchangeFamily super.from,
+    required (SumOfMoney, SumOfMoney) super.argument,
+  }) : super(
+         retry: null,
+         name: r'calcExchangeProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$calcExchangeHash();
+
+  @override
+  String toString() {
+    return r'calcExchangeProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<SumOfMoney> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SumOfMoney create(Ref ref) {
+    final argument = this.argument as (SumOfMoney, SumOfMoney);
+    return calcExchange(ref, argument.$1, argument.$2);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SumOfMoney value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SumOfMoney>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CalcExchangeProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$calcExchangeHash() => r'b9263899385b4decd67af12b2a80c7280f7af1b3';
+
+final class CalcExchangeFamily extends $Family
+    with $FunctionalFamilyOverride<SumOfMoney, (SumOfMoney, SumOfMoney)> {
+  CalcExchangeFamily._()
+    : super(
+        retry: null,
+        name: r'calcExchangeProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  CalcExchangeProvider call(SumOfMoney stock, SumOfMoney input) =>
+      CalcExchangeProvider._(argument: (stock, input), from: this);
+
+  @override
+  String toString() => r'calcExchangeProvider';
+}
