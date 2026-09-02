@@ -33,7 +33,7 @@ final class SnackListProvider
   SnackList create() => SnackList();
 }
 
-String _$snackListHash() => r'1b5a33a0b774ae52673463f0731e82d47a256633';
+String _$snackListHash() => r'de8ee1e9513abb82cf6a2cbbc5b5238ca7767a50';
 
 abstract class _$SnackList extends $AsyncNotifier<List<Snack>> {
   FutureOr<List<Snack>> build();

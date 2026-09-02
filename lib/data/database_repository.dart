@@ -35,6 +35,10 @@ class DatabaseRepository {
     return await snackFromDbModel(await _databaseService.getSnackById(id));
   }
 
+  Future<void> updateSnackAmount(int id, int amount) async {
+    await _databaseService.updateSnackAmount(id, amount);
+  }
+
   Future<Transfer> createTransfer(Transfer transfer) async {
     final id = await _databaseService.addTransfer(transfer);
     return await _databaseService.getTransferById(id);

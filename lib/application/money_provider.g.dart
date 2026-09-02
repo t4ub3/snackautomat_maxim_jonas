@@ -41,7 +41,7 @@ final class InsertedMoneyProvider
   }
 }
 
-String _$insertedMoneyHash() => r'e3813b432d532e49f33e20273a2d9d5a0812daa7';
+String _$insertedMoneyHash() => r'd06c132bfaab02895692bf5a6bdd7162915b9d91';
 
 abstract class _$InsertedMoney extends $Notifier<SumOfMoney> {
   SumOfMoney build();
@@ -64,7 +64,8 @@ abstract class _$InsertedMoney extends $Notifier<SumOfMoney> {
 @ProviderFor(CoinStock)
 final coinStockProvider = CoinStockProvider._();
 
-final class CoinStockProvider extends $NotifierProvider<CoinStock, SumOfMoney> {
+final class CoinStockProvider
+    extends $AsyncNotifierProvider<CoinStock, SumOfMoney> {
   CoinStockProvider._()
     : super(
         from: null,
@@ -82,29 +83,21 @@ final class CoinStockProvider extends $NotifierProvider<CoinStock, SumOfMoney> {
   @$internal
   @override
   CoinStock create() => CoinStock();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(SumOfMoney value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<SumOfMoney>(value),
-    );
-  }
 }
 
-String _$coinStockHash() => r'f874a5f21c4f4b31879807bf242d594611634c88';
+String _$coinStockHash() => r'f96dab36c2f67dac5d579f6f6a77a699249c1b83';
 
-abstract class _$CoinStock extends $Notifier<SumOfMoney> {
-  SumOfMoney build();
+abstract class _$CoinStock extends $AsyncNotifier<SumOfMoney> {
+  FutureOr<SumOfMoney> build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<SumOfMoney, SumOfMoney>;
+    final ref = this.ref as $Ref<AsyncValue<SumOfMoney>, SumOfMoney>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<SumOfMoney, SumOfMoney>,
-              SumOfMoney,
+              AnyNotifier<AsyncValue<SumOfMoney>, SumOfMoney>,
+              AsyncValue<SumOfMoney>,
               Object?,
               Object?
             >;

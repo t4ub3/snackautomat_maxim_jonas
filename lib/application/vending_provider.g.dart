@@ -40,7 +40,7 @@ final class VendingProvider extends $NotifierProvider<Vending, bool> {
   }
 }
 
-String _$vendingHash() => r'f260356e9b87ca733c9384af99ee253e216577c2';
+String _$vendingHash() => r'e970e6579e65c5b5bf388ef4fb0ba56d8d58602b';
 
 abstract class _$Vending extends $Notifier<bool> {
   bool build();

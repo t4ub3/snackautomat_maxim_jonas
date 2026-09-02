@@ -30,6 +30,23 @@ class SnackList extends _$SnackList {
     final current = await future;
     state = AsyncData([...current, ...createdSnacks]);
   }
+
+  Future<void> decreaseAmount(Snack snack) async {
+    if (snack.id == null) {
+      return;
+    }
+
+    final newAmount = snack.amount - 1;
+    await ref
+        .read(databaseRepositoryProvider)
+        .updateSnackAmount(snack.id!, newAmount);
+
+    final current = await future;
+    state = AsyncData([
+      for (final s in current)
+        if (s.id == snack.id) s.copyWith(amount: newAmount) else s,
+    ]);
+  }
 }
 
 @riverpod

@@ -43,6 +43,7 @@ class DatabaseService {
         _nameColumnName: snack.name,
         _priceColumnName: snack.price,
         _fileAsBase64ColumnName: snack.imageAsBase64,
+        _amountColumnName: snack.amount,
       },
     );
   }
@@ -57,6 +58,7 @@ class DatabaseService {
           row[_nameColumnName] as String,
           row[_priceColumnName] as double,
           row[_fileAsBase64ColumnName] as String,
+          row[_amountColumnName] as int,
         );
       }).toList(),
     );
@@ -72,10 +74,21 @@ class DatabaseService {
           row[_nameColumnName] as String,
           row[_priceColumnName] as double,
           row[_fileAsBase64ColumnName] as String,
+          row[_amountColumnName] as int,
         );
       }).toList(),
     );
     return results.first;
+  }
+
+  Future<void> updateSnackAmount(int id, int amount) async {
+    final db = await database;
+    await db.update(
+      _snackTableName,
+      {_amountColumnName: amount},
+      where: "$_idColumnName = ?",
+      whereArgs: [id],
+    );
   }
 
   Future<int> addTransfer(Transfer transfer) async {
@@ -141,6 +154,17 @@ class DatabaseService {
       orderBy: "rowid DESC",
       limit: 1,
     );
+
+    if (data.isEmpty) {
+      return SumOfMoney(
+        count200ct: 0,
+        count100ct: 0,
+        count50ct: 0,
+        count20ct: 0,
+        count10ct: 0,
+        count5ct: 0,
+      );
+    }
 
     final results = await Future.wait(
       data.map((row) async {

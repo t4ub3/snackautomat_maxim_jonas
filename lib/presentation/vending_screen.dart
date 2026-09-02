@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:snackautomat/application/money_provider.dart';
 import 'package:snackautomat/application/snack_provider.dart';
 import 'package:snackautomat/application/vending_provider.dart';
+import 'package:snackautomat/models/sum_of_money.dart';
 import 'package:snackautomat/presentation/admin_page.dart';
 import 'package:snackautomat/presentation/helpers.dart';
 
@@ -15,7 +16,16 @@ class Snackautomat extends ConsumerWidget {
     final selectedSnack = ref.watch(selectedSnackProvider);
     final insertedMoney = ref.watch(insertedMoneyProvider);
     final vending = ref.watch(vendingProvider);
-    final coinStock = ref.watch(coinStockProvider);
+    final coinStock =
+        ref.watch(coinStockProvider).value ??
+        SumOfMoney(
+          count200ct: 0,
+          count100ct: 0,
+          count50ct: 0,
+          count20ct: 0,
+          count10ct: 0,
+          count5ct: 0,
+        );
     final exchange = ref.watch(
       calcExchangeProvider(coinStock, insertedMoney),
     );
@@ -202,7 +212,9 @@ class Snackautomat extends ConsumerWidget {
                         const SizedBox(height: 5),
                         Button(
                           text: 'bestätigen',
-                          onPressed: () {},
+                          onPressed: () {
+                            ref.read(vendingProvider.notifier).buySnack();
+                          },
                         ),
                       ],
                     ),

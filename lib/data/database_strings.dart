@@ -8,7 +8,8 @@ CREATE TABLE $_snackTableName (
 $_idColumnName INTEGER PRIMARY KEY,
 $_nameColumnName TEXT NOT NULL,
 $_priceColumnName REAL NOT NULL,
-$_fileAsBase64ColumnName TEXT NOT NULL
+$_fileAsBase64ColumnName TEXT NOT NULL,
+$_amountColumnName INTEGER NOT NULL DEFAULT 0
 );
 ''';
 
@@ -73,6 +74,7 @@ const String _idColumnName = "id";
 const String _nameColumnName = "name";
 const String _priceColumnName = "price";
 const String _fileAsBase64ColumnName = "fileAsBase64";
+const String _amountColumnName = "amount";
 
 // shelf table
 const String _shelfTableName = "shelfs";

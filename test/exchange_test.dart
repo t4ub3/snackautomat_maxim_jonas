@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:snackautomat/application/money_provider.dart';
 import 'package:snackautomat/application/snack_provider.dart';
 import 'package:snackautomat/models/snack.dart';
+import 'package:snackautomat/models/sum_of_money.dart';
 
 void main() {
   test('exchangeTest', () {
@@ -29,30 +30,24 @@ void main() {
 
     final input = container.read(insertedMoneyProvider).copyWith(count200ct: 1);
 
+    final zeroStock = SumOfMoney(
+      count200ct: 0,
+      count100ct: 0,
+      count50ct: 0,
+      count20ct: 0,
+      count10ct: 0,
+      count5ct: 0,
+    );
+
     final stocks = [
       // 1 x 20ct vorhanden
-      container
-          .read(coinStockProvider)
-          .copyWith(
-            count20ct: 1,
-          ),
+      zeroStock.copyWith(count20ct: 1),
 
       // 2 x 10ct vorhanden
-      container
-          .read(coinStockProvider)
-          .copyWith(
-            count20ct: 0,
-            count10ct: 2,
-          ),
+      zeroStock.copyWith(count10ct: 2),
 
       // Kein passendes Wechselgeld vorhanden
-      container
-          .read(coinStockProvider)
-          .copyWith(
-            count20ct: 0,
-            count10ct: 0,
-            count5ct: 0,
-          ),
+      zeroStock,
     ];
 
     final expected = [

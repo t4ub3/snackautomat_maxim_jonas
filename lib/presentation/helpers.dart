@@ -65,8 +65,11 @@ class ProduktFach extends StatelessWidget {
                     decoration: const BoxDecoration(
                       border: Border(top: BorderSide(), right: BorderSide()),
                     ),
-                    child: const Center(
-                      child: Text('3 St.', style: TextStyle(fontSize: 10)),
+                    child: Center(
+                      child: Text(
+                        '${snack.amount} St.',
+                        style: const TextStyle(fontSize: 10),
+                      ),
                     ),
                   ),
                 ),

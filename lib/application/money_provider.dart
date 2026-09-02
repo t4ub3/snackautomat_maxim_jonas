@@ -105,7 +105,7 @@ class InsertedMoney extends _$InsertedMoney {
       eur2Amount: currentStock.count200ct,
       sumInCt: 0,
     );
-    ref.read(databaseRepositoryProvider).createTransfer(emptyStock);
+    await ref.read(databaseRepositoryProvider).createTransfer(emptyStock);
     Transfer setDefaultStock = Transfer(
       description: "RESET - set default",
       isIncome: true,
@@ -123,22 +123,19 @@ class InsertedMoney extends _$InsertedMoney {
      * check, if stock is 0
      * create transaction for default stock
      */
-    return ref.read(databaseRepositoryProvider).createTransfer(setDefaultStock);
+    final result = await ref
+        .read(databaseRepositoryProvider)
+        .createTransfer(setDefaultStock);
+    ref.invalidate(coinStockProvider);
+    return result;
   }
 }
 
 @riverpod
 class CoinStock extends _$CoinStock {
   @override
-  SumOfMoney build() {
-    return SumOfMoney(
-      count200ct: 5,
-      count100ct: 5,
-      count50ct: 10,
-      count20ct: 1,
-      count10ct: 0,
-      count5ct: 0,
-    );
+  Future<SumOfMoney> build() {
+    return ref.watch(databaseRepositoryProvider).getCurrentStock();
   }
 }
 

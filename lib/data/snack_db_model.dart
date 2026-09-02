@@ -9,13 +9,26 @@ class SnackDbModel {
   final String name;
   final double price;
   final String imageAsBase64;
+  final int amount;
 
-  SnackDbModel(this.id, this.name, this.price, this.imageAsBase64);
+  SnackDbModel(
+    this.id,
+    this.name,
+    this.price,
+    this.imageAsBase64,
+    this.amount,
+  );
 }
 
 Future<SnackDbModel> dbModelfromSnack(Snack snack) async {
   final base64String = base64Encode(await snack.image.readAsBytes());
-  return SnackDbModel(snack.id, snack.name, snack.price, base64String);
+  return SnackDbModel(
+    snack.id,
+    snack.name,
+    snack.price,
+    base64String,
+    snack.amount,
+  );
 }
 
 Future<Snack> snackFromDbModel(SnackDbModel snackDb) async {
@@ -30,5 +43,6 @@ Future<Snack> snackFromDbModel(SnackDbModel snackDb) async {
     name: snackDb.name,
     price: snackDb.price,
     image: image,
+    amount: snackDb.amount,
   );
 }
