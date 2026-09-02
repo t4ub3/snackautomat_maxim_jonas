@@ -249,13 +249,6 @@ class Snackautomat extends ConsumerWidget {
                               ),
                           ],
                         ),
-                        const SizedBox(height: 5),
-                        Button(
-                          text: 'bestätigen',
-                          onPressed: () {
-                            ref.read(vendingProvider.notifier).buySnack();
-                          },
-                        ),
                       ],
                     ),
                   ),
