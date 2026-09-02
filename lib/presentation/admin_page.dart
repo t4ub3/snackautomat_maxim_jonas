@@ -1,30 +1,104 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:snackautomat/application/money_provider.dart';
+import 'package:snackautomat/application/snack_provider.dart';
+import 'package:snackautomat/models/snack.dart';
+import 'package:snackautomat/models/sum_of_money.dart';
 
-class AdminPage extends ConsumerWidget {
-  final List<Coin> coins = [
-    Coin(name: '5 ct', stock: 20),
-    Coin(name: '10 ct', stock: 15),
-    Coin(name: '20 ct', stock: 12),
-    Coin(name: '50 ct', stock: 8),
-    Coin(name: '1 €', stock: 10),
-    Coin(name: '2 €', stock: 6),
-  ];
+class _CoinDenomination {
+  final String name;
+  final int valueCt;
 
-  final List<Snacks> snacks = [
-    Snacks(name: 'Nüsse', price: '2.50 €', stock: 10),
-    Snacks(name: 'Haribo', price: '3.50 €', stock: 2),
-    Snacks(name: 'Schokolade', price: '2.00 €', stock: 4),
-    Snacks(name: 'Cookie', price: '1.50 €', stock: 6),
-    Snacks(name: 'Cake', price: '1.50 €', stock: 2),
-    Snacks(name: 'Ice Cream', price: '1.70 €', stock: 5),
-  ];
+  const _CoinDenomination(this.name, this.valueCt);
+}
 
-  AdminPage({super.key});
+const _coinDenominations = [
+  _CoinDenomination('5 ct', 5),
+  _CoinDenomination('10 ct', 10),
+  _CoinDenomination('20 ct', 20),
+  _CoinDenomination('50 ct', 50),
+  _CoinDenomination('1 €', 100),
+  _CoinDenomination('2 €', 200),
+];
+
+int _stockForValue(SumOfMoney stock, int valueCt) {
+  switch (valueCt) {
+    case 5:
+      return stock.count5ct;
+    case 10:
+      return stock.count10ct;
+    case 20:
+      return stock.count20ct;
+    case 50:
+      return stock.count50ct;
+    case 100:
+      return stock.count100ct;
+    case 200:
+      return stock.count200ct;
+    default:
+      return 0;
+  }
+}
+
+class AdminPage extends ConsumerStatefulWidget {
+  const AdminPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AdminPage> createState() => _AdminPageState();
+}
+
+class _AdminPageState extends ConsumerState<AdminPage> {
+  final Map<int, int> _snackAdditions = {};
+  final Map<int, int> _coinAdditions = {
+    for (final coin in _coinDenominations) coin.valueCt: 0,
+  };
+
+  void _changeSnackAddition(int snackId, int delta) {
+    setState(() {
+      final current = _snackAdditions[snackId] ?? 0;
+      _snackAdditions[snackId] = (current + delta).clamp(0, 999);
+    });
+  }
+
+  void _changeCoinAddition(int valueCt, int delta) {
+    setState(() {
+      final current = _coinAdditions[valueCt] ?? 0;
+      _coinAdditions[valueCt] = (current + delta).clamp(0, 999);
+    });
+  }
+
+  Future<void> _addSnacks(List<Snack> snacks) async {
+    for (final snack in snacks) {
+      final delta = snack.id == null ? 0 : (_snackAdditions[snack.id] ?? 0);
+      if (delta > 0) {
+        await ref.read(snackListProvider.notifier).increaseAmount(snack, delta);
+      }
+    }
+    setState(_snackAdditions.clear);
+  }
+
+  Future<void> _depositCoins() async {
+    final addition = SumOfMoney(
+      count200ct: _coinAdditions[200] ?? 0,
+      count100ct: _coinAdditions[100] ?? 0,
+      count50ct: _coinAdditions[50] ?? 0,
+      count20ct: _coinAdditions[20] ?? 0,
+      count10ct: _coinAdditions[10] ?? 0,
+      count5ct: _coinAdditions[5] ?? 0,
+    );
+    await ref.read(coinStockProvider.notifier).addCoins(addition);
+    setState(() {
+      for (final key in _coinAdditions.keys) {
+        _coinAdditions[key] = 0;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final snacksAsync = ref.watch(snackListProvider);
+    final coinStockAsync = ref.watch(coinStockProvider);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5E6F8),
       appBar: AppBar(
@@ -33,6 +107,7 @@ class AdminPage extends ConsumerWidget {
       body: Padding(
         padding: const EdgeInsets.all(40),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Linke Seite
             Expanded(
@@ -49,136 +124,176 @@ class AdminPage extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  Table(
-                    border: TableBorder.all(color: Colors.black),
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    children: [
-                      TableRow(
+                  snacksAsync.when(
+                    data: (snacks) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              'Snack',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              'Preis',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              'Vorrat',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              'Hinzufügen',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      ...snacks.map(
-                        (snack) => TableRow(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Text(
-                                snack.name,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Text(
-                                snack.price,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Text(
-                                snack.stock.toString(),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                          Table(
+                            border: TableBorder.all(color: Colors.black),
+                            defaultVerticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            children: [
+                              const TableRow(
                                 children: [
-                                  Text(
-                                    snack.added.toString(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text(
+                                      'Snack',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                  Column(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {},
-                                        child: const Icon(
-                                          Icons.arrow_drop_up,
-                                          color: Colors.green,
-                                          size: 28,
-                                        ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text(
+                                      'Preis',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      InkWell(
-                                        onTap: () {},
-                                        child: const Icon(
-                                          Icons.arrow_drop_down,
-                                          color: Colors.red,
-                                          size: 28,
-                                        ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text(
+                                      'Vorrat',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Text(
+                                      'Hinzufügen',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
+                              ...snacks.map(
+                                (snack) => TableRow(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        snack.name,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        '${snack.price.toStringAsFixed(2)} €',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        snack.amount.toString(),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            (snack.id == null
+                                                    ? 0
+                                                    : _snackAdditions[snack
+                                                              .id] ??
+                                                          0)
+                                                .toString(),
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              InkWell(
+                                                onTap: snack.id == null
+                                                    ? null
+                                                    : () =>
+                                                          _changeSnackAddition(
+                                                            snack.id!,
+                                                            1,
+                                                          ),
+                                                child: const Icon(
+                                                  Icons.arrow_drop_up,
+                                                  color: Colors.green,
+                                                  size: 28,
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: snack.id == null
+                                                    ? null
+                                                    : () =>
+                                                          _changeSnackAddition(
+                                                            snack.id!,
+                                                            -1,
+                                                          ),
+                                                child: const Icon(
+                                                  Icons.arrow_drop_down,
+                                                  color: Colors.red,
+                                                  size: 28,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: ElevatedButton(
+                              onPressed: () => _addSnacks(snacks),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                              ),
+                              child: const Text(
+                                'Hinzufügen',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-
-                  Align(
-                    alignment: Alignment.bottomRight,
-
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                      ),
-                      child: const Text(
-                        'Nachfüllen',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                          ),
+                        ],
+                      );
+                    },
+                    error: (error, stackTrace) {
+                      return Text('$error');
+                    },
+                    loading: () {
+                      return const Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CircularProgressIndicator(),
+                      );
+                    },
                   ),
                 ],
               ),
             ),
 
-            Spacer(),
+            const Spacer(),
 
             // Rechte Seite
             Expanded(
@@ -195,104 +310,131 @@ class AdminPage extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  Table(
-                    border: TableBorder.all(color: Colors.black),
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    children: [
-                      TableRow(
+                  coinStockAsync.when(
+                    data: (coinStock) {
+                      return Table(
+                        border: TableBorder.all(color: Colors.black),
+                        defaultVerticalAlignment:
+                            TableCellVerticalAlignment.middle,
                         children: [
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              'Münze',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              'Bestand',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              'Hinzufügen',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                      ...coins.map(
-                        (coin) => TableRow(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text(
-                                coin.name,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text(
-                                coin.stock.toString(),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    coin.added.toString(),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          const TableRow(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  'Münze',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  Column(
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  'Bestand',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  'Hinzufügen',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          ..._coinDenominations.map(
+                            (coin) => TableRow(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                    coin.name,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                    _stockForValue(
+                                      coinStock,
+                                      coin.valueCt,
+                                    ).toString(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      InkWell(
-                                        onTap: () {},
-                                        child: const Icon(
-                                          Icons.arrow_drop_up,
-                                          color: Colors.green,
-                                          size: 28,
+                                      Text(
+                                        (_coinAdditions[coin.valueCt] ?? 0)
+                                            .toString(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      InkWell(
-                                        onTap: () {},
-                                        child: const Icon(
-                                          Icons.arrow_drop_down,
-                                          color: Colors.red,
-                                          size: 28,
-                                        ),
+                                      Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () => _changeCoinAddition(
+                                              coin.valueCt,
+                                              1,
+                                            ),
+                                            child: const Icon(
+                                              Icons.arrow_drop_up,
+                                              color: Colors.green,
+                                              size: 28,
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () => _changeCoinAddition(
+                                              coin.valueCt,
+                                              -1,
+                                            ),
+                                            child: const Icon(
+                                              Icons.arrow_drop_down,
+                                              color: Colors.red,
+                                              size: 28,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
+                          ),
+                        ],
+                      );
+                    },
+                    error: (error, stackTrace) {
+                      return Text('$error');
+                    },
+                    loading: () {
+                      return const Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CircularProgressIndicator(),
+                      );
+                    },
                   ),
 
-                  SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
 
                   Align(
                     alignment: Alignment.bottomRight,
-
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: _depositCoins,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.purple,
                       ),
@@ -305,7 +447,7 @@ class AdminPage extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
@@ -325,7 +467,7 @@ class AdminPage extends ConsumerWidget {
                                     ),
                                   ),
                                   Text(
-                                    'Alle Daten (Snacks, Geld) werden gelöscht!',
+                                    'Alle Daten (Snacks, Geld) werden auf Standardwerte zurückgesetzt!',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -383,30 +525,4 @@ class AdminPage extends ConsumerWidget {
       ),
     );
   }
-}
-
-class Coin {
-  final String name;
-  final int stock;
-  final int added;
-
-  Coin({
-    required this.name,
-    required this.stock,
-    this.added = 0,
-  });
-}
-
-class Snacks {
-  final String name;
-  final String price;
-  final int stock;
-  final int added;
-
-  Snacks({
-    required this.name,
-    required this.price,
-    required this.stock,
-    this.added = 0,
-  });
 }

@@ -47,6 +47,23 @@ class SnackList extends _$SnackList {
         if (s.id == snack.id) s.copyWith(amount: newAmount) else s,
     ]);
   }
+
+  Future<void> increaseAmount(Snack snack, int delta) async {
+    if (snack.id == null || delta <= 0) {
+      return;
+    }
+
+    final newAmount = snack.amount + delta;
+    await ref
+        .read(databaseRepositoryProvider)
+        .updateSnackAmount(snack.id!, newAmount);
+
+    final current = await future;
+    state = AsyncData([
+      for (final s in current)
+        if (s.id == snack.id) s.copyWith(amount: newAmount) else s,
+    ]);
+  }
 }
 
 @riverpod

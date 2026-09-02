@@ -100,7 +100,7 @@ class Snackautomat extends ConsumerWidget {
                       },
                       child: Container(
                         width: double.infinity,
-                        height: 100,
+                        height: 200,
                         decoration: BoxDecoration(
                           color: const Color(0xFFE3F2FD),
                           border: Border.all(color: Colors.black, width: 2),
@@ -137,7 +137,7 @@ class Snackautomat extends ConsumerWidget {
                                     scale: value,
                                     child: Image.file(
                                       selectedSnack.image,
-                                      height: 85,
+                                      height: 175,
                                     ),
                                   );
                                 },
@@ -183,6 +183,7 @@ class Snackautomat extends ConsumerWidget {
                   // Display
                   Container(
                     width: double.infinity,
+                    height: 120,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: const Color(0xFFEDF7ED),

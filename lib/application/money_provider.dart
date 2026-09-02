@@ -34,6 +34,7 @@ import 'package:snackautomat/application/snack_provider.dart';
 import 'package:snackautomat/application/vending_provider.dart';
 import 'package:snackautomat/data/database_repository.dart';
 import 'package:snackautomat/models/transfer.dart';
+import 'package:snackautomat/services/init_db_service.dart';
 import '../models/sum_of_money.dart';
 
 part 'money_provider.g.dart';
@@ -91,42 +92,19 @@ class InsertedMoney extends _$InsertedMoney {
   }
 
   Future<Transfer> resetStock() async {
-    SumOfMoney currentStock = await ref
-        .read(databaseRepositoryProvider)
-        .getCurrentStock();
-    Transfer emptyStock = Transfer(
-      description: "RESET - empty Stock",
-      isIncome: false,
-      ct5Amount: currentStock.count5ct,
-      ct10Amount: currentStock.count10ct,
-      ct20Amount: currentStock.count20ct,
-      ct50Amount: currentStock.count50ct,
-      eur1Amount: currentStock.count100ct,
-      eur2Amount: currentStock.count200ct,
-      sumInCt: 0,
-    );
-    await ref.read(databaseRepositoryProvider).createTransfer(emptyStock);
-    Transfer setDefaultStock = Transfer(
-      description: "RESET - set default",
-      isIncome: true,
-      ct5Amount: 10,
-      ct10Amount: 10,
-      ct20Amount: 10,
-      ct50Amount: 10,
-      eur1Amount: 5,
-      eur2Amount: 5,
-      sumInCt: 0,
-    );
-    /**
-     * read current stock
-     * create transaction to set stock to 0
-     * check, if stock is 0
-     * create transaction for default stock
-     */
-    final result = await ref
-        .read(databaseRepositoryProvider)
-        .createTransfer(setDefaultStock);
+    final databaseRepository = ref.read(databaseRepositoryProvider);
+
+    // Datenbank komplett leeren (Snacks, Transaktionen, Bestand)
+    await databaseRepository.resetDatabase();
+
+    // Standard-Snacks neu anlegen
+    ref.invalidate(snackListProvider);
+    await ref.read(snackListProvider.notifier).addSnacks(defaultSnacks);
+
+    // Standard-Münzbestand neu anlegen
+    final result = await databaseRepository.createTransfer(baseStock);
     ref.invalidate(coinStockProvider);
+
     return result;
   }
 }
@@ -136,6 +114,27 @@ class CoinStock extends _$CoinStock {
   @override
   Future<SumOfMoney> build() {
     return ref.watch(databaseRepositoryProvider).getCurrentStock();
+  }
+
+  Future<void> addCoins(SumOfMoney addition) async {
+    if (addition.getValueInCents() <= 0) {
+      return;
+    }
+
+    final transfer = Transfer(
+      description: 'Admin Einzahlung',
+      isIncome: true,
+      ct5Amount: addition.count5ct,
+      ct10Amount: addition.count10ct,
+      ct20Amount: addition.count20ct,
+      ct50Amount: addition.count50ct,
+      eur1Amount: addition.count100ct,
+      eur2Amount: addition.count200ct,
+      sumInCt: addition.getValueInCents(),
+    );
+
+    await ref.read(databaseRepositoryProvider).createTransfer(transfer);
+    ref.invalidateSelf();
   }
 }
 

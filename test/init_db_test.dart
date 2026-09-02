@@ -63,7 +63,7 @@ void main() {
     );
     File nutAndBerryImg = File(
       p.normalize(
-        p.absolute(p.join("test", "test_assets", "nut-and-berry.png")),
+        p.absolute(p.join("test", "test_assets", "nut-and-berry-mix.png")),
       ),
     );
     File peanutImg = File(
@@ -77,30 +77,59 @@ void main() {
       ),
     );
 
-    Snack chipsBbq = Snack(name: "chipsBbq", price: 2.5, image: chipsBbqImg);
-    Snack chocolate = Snack(name: "chocolate", price: 2.3, image: chocolateImg);
-    Snack crackers = Snack(name: "crackers", price: 2.0, image: crackersImg);
+    Snack chipsBbq = Snack(
+      name: "chipsBbq",
+      price: 2.5,
+      image: chipsBbqImg,
+      amount: 10,
+    );
+    Snack chocolate = Snack(
+      name: "chocolate",
+      price: 2.3,
+      image: chocolateImg,
+      amount: 10,
+    );
+    Snack crackers = Snack(
+      name: "crackers",
+      price: 2.0,
+      image: crackersImg,
+      amount: 10,
+    );
     Snack gummyBears = Snack(
       name: "gummyBears",
       price: 2.0,
       image: gummyBearsImg,
+      amount: 10,
     );
-    Snack licorice = Snack(name: "licorice", price: 2.2, image: licoriceImg);
+    Snack licorice = Snack(
+      name: "licorice",
+      price: 2.2,
+      image: licoriceImg,
+      amount: 10,
+    );
     Snack marshmallows = Snack(
       name: "marshmallows",
       price: 2.8,
       image: marshmallowsImg,
+      amount: 10,
     );
     Snack nutAndBerry = Snack(
       name: "nutAndBerry",
       price: 2.6,
       image: nutAndBerryImg,
+      amount: 10,
     );
-    Snack peanut = Snack(name: "peanut", price: 1.9, image: peanutImg);
+    Snack peanut = Snack(
+      name: "peanut",
+      price: 1.9,
+      image: peanutImg,
+      amount: 10,
+    );
     Snack chipsSaltPepper = Snack(
       name: "chipsSaltPepper",
       price: 2.5,
       image: chipsSaltPepperImg,
+      amount: 10,
     );
 
     await container.read(snackListProvider.notifier).addSnack(chipsBbq);

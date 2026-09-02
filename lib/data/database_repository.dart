@@ -58,4 +58,8 @@ class DatabaseRepository {
     await _databaseService.deleteTransfers();
     return await createStock(stock);
   }
+
+  Future<void> resetDatabase() async {
+    await _databaseService.resetDatabase();
+  }
 }
